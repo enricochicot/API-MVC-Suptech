@@ -4,13 +4,10 @@ namespace API_MVC_Suptech.Entitys.Dtos
 {
     public class NovoUsuarioDto
     {
-     [Required]
-     public string Nome { get; set; }
+     public required string Nome { get; set; }
 
-     [Required]
-     public string Email { get; set; }
+     public required string Email { get; set; }
 
-     [Required]
-     public string Senha { get; set; }
+     public required string Senha { get; set; }
     }
 }
