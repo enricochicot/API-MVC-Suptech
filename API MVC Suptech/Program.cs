@@ -1,7 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+var conn = builder.Configuration["ConnectionStrings:default"];
+builder.Services.AddDbContext<CrudData>(x => x.UseSqlServer(conn));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
