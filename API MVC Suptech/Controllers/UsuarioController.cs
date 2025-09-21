@@ -24,33 +24,24 @@ namespace API_MVC_Suptech.Controllers
 
         // Ações CRUD (Create, Read, Update, Delete) para a entidade Usuario podem ser implementadas aqui.
         [HttpPost("Adicionar")]
-        public async Task<ActionResult<LoginResponseDto>> AdicionaUsuario([FromBody] NovoUsuarioDto request)
+        public async Task<IActionResult> AdicionarUsuario([FromBody] NovoUsuarioDto request)
         {
-            var usuarioExistente = await _context.Usuario.FirstOrDefaultAsync(u => u.Email == request.Email);
 
-            if (usuarioExistente != null)
-            {
-                return BadRequest("Email em uso, tente outro!");
-            }
-            var novoUsuario = new Usuario
-            {
+
+            var usuario = new Usuario
+           {
                 Nome = request.Nome,
                 Email = request.Email,
-                Senha = request.Senha,
-                Setor = "Atendimento",
-                CreationDate = DateTime.Now
+                Senha = request.Senha // Em um cenário real, a senha deve ser hashada antes de ser armazenada.
             };
+            if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Senha))
+            {
+                return BadRequest("Nome, Email e Senha são obrigatórios.");
+            }
 
-            try
-            {
-                _context.Usuario.Add(novoUsuario);
-                await _context.SaveChangesAsync();
-                return Ok(novoUsuario);
-            }
-            catch
-            {
-                return BadRequest("Falha ao adicionar um usuário");
-            }
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+            return Ok("Usuário adicionado com sucesso!");
         }
 
     }
