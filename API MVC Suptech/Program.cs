@@ -6,9 +6,14 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+<<<<<<< HEAD
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CrudData>(options =>
 options.UseSqlServer(connectionString));
+=======
+var conn = builder.Configuration["ConnectionStrings:default"];
+builder.Services.AddDbContext<CrudData>(x => x.UseSqlServer(conn));
+>>>>>>> 603368ed9cbff29bdae0d687f4b4b13c00635cdb
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
