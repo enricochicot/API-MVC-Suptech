@@ -10,5 +10,6 @@ namespace API_MVC_Suptech.Data
         
         }
         public DbSet<Entitys.Usuario> Usuarios { get; set; }
+        public DbSet<Entitys.Administrador> Administradores { get; set; }
     }
 }

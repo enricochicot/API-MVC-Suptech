@@ -3,5 +3,9 @@
     public class ExcluirDto
     {
         public required Guid UsuarioID { get; set; }
+
+        public required Guid AdministradorID { get; set; }
+
+
     }
 }
