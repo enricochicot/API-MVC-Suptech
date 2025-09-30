@@ -6,6 +6,9 @@
 
         public required Guid AdministradorID { get; set; }
 
+        public required Guid GerenteId { get; set; }
+
+        public required Guid TecnicoId { get; set; }
 
     }
 }

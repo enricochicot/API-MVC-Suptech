@@ -15,6 +15,7 @@ namespace API_MVC_Suptech.Controllers
         private readonly IConfiguration _configuration;
         private readonly TokenService _tokenService;
 
+        // Construtor para injeção de dependência
         public UsuarioController(CrudData context, IConfiguration configuration, TokenService tokenService)
         {
             _context = context;
@@ -37,7 +38,9 @@ namespace API_MVC_Suptech.Controllers
                 Nome = request.Nome,
                 Email = request.Email,
                 Senha = request.Senha, // Em um cenário real, a senha deve ser hashada antes de ser armazenada.
-                Setor = request.Setor
+                Setor = request.Setor,
+                Telefone = request.Telefone
+
             };
             if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Email) 
                || string.IsNullOrEmpty(usuario.Senha))
@@ -54,7 +57,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("Listar")]
         public async Task<IActionResult> ListarUsuarios()
         {
-            var usuarios = await _context.Usuarios.ToListAsync();
+            List<Usuario> usuarios = await _context.Usuarios.ToListAsync();
             return Ok(usuarios);
         }
 
@@ -72,6 +75,11 @@ namespace API_MVC_Suptech.Controllers
             usuario.Email = request.Email ?? usuario.Email;
             usuario.Senha = request.Senha ?? usuario.Senha;
             usuario.Setor = request.Setor ?? usuario.Setor;
+            
+            if (request.Telefone.HasValue)
+            {
+                usuario.Telefone = request.Telefone.Value.ToString();
+            }
 
             await _context.SaveChangesAsync();
             return Ok("Usuário atualizado com sucesso!");

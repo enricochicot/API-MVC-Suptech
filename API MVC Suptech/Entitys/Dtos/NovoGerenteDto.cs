@@ -1,6 +1,6 @@
 ﻿namespace API_MVC_Suptech.Entitys.Dtos
 {
-    public class NovoAdministradorDto
+    public class NovoGerenteDto
     {
         public required string Nome { get; set; }
         public required string Email { get; set; }

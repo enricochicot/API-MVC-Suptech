@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace API_MVC_Suptech.Entitys
+﻿namespace API_MVC_Suptech.Entitys.Dtos
 {
-    public class Tecnico
+    public class NovoTecnicoDto
     {
-        [Key]
-        public Guid TecnicoId { get; set; } 
         public required string Nome { get; set; }
         public required string Email { get; set; }
         public required string Senha { get; set; }
         public required string Especialidade { get; set; }
-        public string Telefone { get; set; }
+        public required string Telefone { get; set; }
     }
 }
