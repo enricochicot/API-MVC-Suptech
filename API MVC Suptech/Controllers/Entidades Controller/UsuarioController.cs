@@ -57,7 +57,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("Listar")]
         public async Task<IActionResult> ListarUsuarios()
         {
-            List<Usuario> usuarios = await _context.Usuarios.ToListAsync();
+            var usuarios = await _context.Usuarios.ToListAsync();
             return Ok(usuarios);
         }
 
@@ -75,11 +75,8 @@ namespace API_MVC_Suptech.Controllers
             usuario.Email = request.Email ?? usuario.Email;
             usuario.Senha = request.Senha ?? usuario.Senha;
             usuario.Setor = request.Setor ?? usuario.Setor;
-            
-            if (request.Telefone.HasValue)
-            {
-                usuario.Telefone = request.Telefone.Value.ToString();
-            }
+            usuario.Telefone = request.Telefone ?? usuario.Telefone;
+
 
             await _context.SaveChangesAsync();
             return Ok("Usuário atualizado com sucesso!");

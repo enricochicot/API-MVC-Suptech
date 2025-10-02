@@ -10,6 +10,6 @@ namespace API_MVC_Suptech.Entitys
         public required string Email { get; set; }
         public required string Senha { get; set; }
         public required string Setor { get; set; }
-        public string Telefone { get; internal set; }
+        public required string Telefone { get; set; }
     }
 }

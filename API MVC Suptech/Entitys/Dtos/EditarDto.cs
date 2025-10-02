@@ -2,10 +2,10 @@
 {
     public class EditarDto
     {
-        public required string? Nome { get; set; }
-        public required string? Email { get; set; }
-        public required string? Senha { get; set; }
-        public required string? Setor { get; set; }
-        public required int? Telefone { get; set; }
+        public string? Nome { get; set; }
+        public string? Email { get; set; }
+        public string? Senha { get; set; }
+        public string? Setor { get; set; }
+        public string? Telefone { get; set; }
     }
 }
