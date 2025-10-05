@@ -39,7 +39,7 @@ namespace API_MVC_Suptech.Controllers
                 Especialidade = request.Especialidade,
                 Telefone = request.Telefone
             };
-            if (string.IsNullOrEmpty(tecnico.Nome) || string.IsNullOrEmpty(tecnico.Email) 
+            if (string.IsNullOrEmpty(tecnico.Nome) || string.IsNullOrEmpty(tecnico.Email)
                || string.IsNullOrEmpty(tecnico.Senha))
             {
                 return BadRequest("Nome, Email e Senha são obrigatórios.");
@@ -50,5 +50,48 @@ namespace API_MVC_Suptech.Controllers
 
         }
 
+        [HttpGet("Listar")]
+        public async Task<IActionResult> ListarTecnicos()
+        {
+            var tecnicos = await _context.Tecnicos.ToListAsync();
+            return Ok(tecnicos);
+        }
+
+        [HttpPut("Editar/{id}")]
+        public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] NovoTecnicoDto request)
+        {
+            var tecnico = await _context.Tecnicos.FindAsync(id);
+            if (tecnico == null)
+            {
+                return NotFound("Técnico não encontrado.");
+            }
+            tecnico.Nome = request.Nome;
+            tecnico.Email = request.Email;
+            tecnico.Senha = request.Senha; // Em um cenário real, a senha deve ser hashada antes de ser armazenada.
+            tecnico.Especialidade = request.Especialidade;
+            tecnico.Telefone = request.Telefone;
+
+            if (string.IsNullOrEmpty(tecnico.Nome) || string.IsNullOrEmpty(tecnico.Email)
+               || string.IsNullOrEmpty(tecnico.Senha))
+            {
+                return BadRequest("Nome, Email e Senha são obrigatórios.");
+            }
+            _context.Tecnicos.Update(tecnico);
+            await _context.SaveChangesAsync();
+            return Ok("Técnico atualizado com sucesso!");
+        }
+
+        [HttpDelete("Deletar/{id}")]
+        public async Task<IActionResult> DeletarTecnico(Guid id)
+        {
+            var tecnico = await _context.Tecnicos.FindAsync(id);
+            if (tecnico == null)
+            {
+                return NotFound("Técnico não encontrado.");
+            }
+            _context.Tecnicos.Remove(tecnico);
+            await _context.SaveChangesAsync();
+            return Ok("Técnico deletado com sucesso!");
+        }
     }
 }

@@ -53,14 +53,12 @@ namespace API_MVC_Suptech.Controllers
             return Ok("Usuário adicionado com sucesso!");
         }
 
-
         [HttpGet("Listar")]
         public async Task<IActionResult> ListarUsuarios()
         {
             var usuarios = await _context.Usuarios.ToListAsync();
             return Ok(usuarios);
         }
-
 
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarUsuario(Guid id, [FromBody] EditarDto request)
@@ -81,7 +79,6 @@ namespace API_MVC_Suptech.Controllers
             await _context.SaveChangesAsync();
             return Ok("Usuário atualizado com sucesso!");
         }
-
 
         [HttpDelete("Excluir")]
         public async Task<IActionResult> ExcluirUsuario(Guid id)
