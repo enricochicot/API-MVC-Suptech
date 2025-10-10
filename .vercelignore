@@ -1,0 +1,32 @@
+# .NET build artifacts
+bin/
+obj/
+*.user
+*.suo
+*.sln.docstates
+
+# Vercel
+.vercel
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# Database
+*.db
+*.sqlite
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
