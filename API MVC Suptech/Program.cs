@@ -6,8 +6,16 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+// Resolve connection string from multiple possible sources and fail fast with a clear message
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
     ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    // Provide an explicit error early so Azure App Service / logs show a clear cause
+    throw new InvalidOperationException("Missing database connection string. Set 'ConnectionStrings__DefaultConnection' (recommended) or 'DATABASE_URL' as an App Setting / Environment Variable.");
+}
 
 builder.Services.AddDbContext<CrudData>(options =>
     options.UseSqlServer(connectionString));
@@ -58,7 +66,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
->>>>>>> master
 
 app.UseCors("policy");
 
@@ -67,5 +74,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
 
 
