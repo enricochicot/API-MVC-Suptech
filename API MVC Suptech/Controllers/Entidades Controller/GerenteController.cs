@@ -1,90 +1,115 @@
 ﻿using API_MVC_Suptech.Data;
 using API_MVC_Suptech.Entitys;
 using API_MVC_Suptech.Entitys.Dtos;
-using API_MVC_Suptech.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
+using Microsoft.Extensions.Logging;
 
 namespace API_MVC_Suptech.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GerenteController : Controller
+    public class GerenteController : ControllerBase
     {
         private readonly CrudData _context;
-        private readonly IConfiguration _configuration;
-        private readonly TokenService _tokenService;
+        private readonly ILogger<GerenteController> _logger;
 
-        public GerenteController(CrudData context, IConfiguration configuration, TokenService tokenService)
+        public GerenteController(CrudData context, ILogger<GerenteController> logger)
         {
             _context = context;
-            _configuration = configuration;
-            _tokenService = tokenService;
+            _logger = logger;
         }
 
-        // Ações CRUD (Create, Read, Update, Delete) para a entidade Gerente podem ser implementadas aqui.
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarGerente([FromBody] NovoGerenteDto request)
         {
-            var existingGerente = await _context.Gerentes.FirstOrDefaultAsync(g => g.Email == request.Email);
-            if (existingGerente != null)
+            try
             {
-                return BadRequest("Email já está em uso.");
-            }
-            var gerente = new Gerente
-            {
-                Nome = request.Nome,
-                Email = request.Email,
-                Senha = request.Senha, // Em um cenário real, a senha deve ser hashada antes de ser armazenada.
-                Setor = request.Setor,
-                Telefone = request.Telefone
-            };
-            if (string.IsNullOrEmpty(gerente.Nome) || string.IsNullOrEmpty(gerente.Email)
-               || string.IsNullOrEmpty(gerente.Senha))
-            {
-                return BadRequest("Nome, Email e Senha são obrigatórios.");
-            }
-            _context.Gerentes.Add(gerente);
-            await _context.SaveChangesAsync();
-            return Ok("Gerente adicionado com sucesso!");
+                var existing = await _context.Gerentes.FirstOrDefaultAsync(a => a.Email == request.Email);
+                if (existing != null)
+                    return BadRequest("Email já está em uso.");
 
+                var gerente = new Gerente
+                {
+                    Nome = request.Nome,
+                    Email = request.Email,
+                    Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha),
+                    Setor = request.Setor,
+                    Telefone = request.Telefone
+                };
+                _context.Gerentes.Add(gerente);
+                await _context.SaveChangesAsync();
+                return Ok("Gerente adicionado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao adicionar gerente.");
+                return StatusCode(500, "Ocorreu um erro ao adicionar o gerente.");
+            }
         }
 
         [HttpGet("Listar")]
         public async Task<IActionResult> ListarGerentes()
         {
-            var gerentes = await _context.Gerentes.ToListAsync();
-            return Ok(gerentes);
+            try
+            {
+                var gerentes = await _context.Gerentes.ToListAsync();
+                return Ok(gerentes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao listar gerentes.");
+                return StatusCode(500, "Ocorreu um erro ao listar os gerentes.");
+            }
         }
 
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarGerente(Guid id, [FromBody] EditarDto request)
         {
-            var gerente = await _context.Gerentes.FindAsync(id);
-            if (gerente == null)
+            try
             {
-                return NotFound("Gerente não encontrado.");
+                var gerente = await _context.Gerentes.FindAsync(id);
+                if (gerente == null)
+                    return NotFound("Gerente não encontrado.");
+
+                gerente.Nome = request.Nome ?? gerente.Nome;
+                gerente.Email = request.Email ?? gerente.Email;
+                if (!string.IsNullOrEmpty(request.Senha))
+                {
+                    gerente.Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha);
+                }
+                gerente.Setor = request.Setor ?? gerente.Setor;
+                gerente.Telefone = request.Telefone ?? gerente.Telefone;
+
+                await _context.SaveChangesAsync();
+                return Ok("Gerente atualizado com sucesso!");
             }
-            gerente.Nome = request.Nome ?? gerente.Nome;
-            gerente.Email = request.Email ?? gerente.Email;
-            gerente.Senha = request.Senha ?? gerente.Senha;
-            gerente.Setor = request.Setor ?? gerente.Setor;
-            gerente.Telefone = request.Telefone ?? gerente.Telefone;
-            await _context.SaveChangesAsync();
-            return Ok("Gerente atualizado com sucesso!");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao editar gerente com id {id}.");
+                return StatusCode(500, "Ocorreu um erro ao editar o gerente.");
+            }
         }
 
-        [HttpDelete("Deletar/{id}")]
+        [HttpDelete("Excluir")]
         public async Task<IActionResult> DeletarGerente(Guid id)
         {
-            var gerente = await _context.Gerentes.FindAsync(id);
-            if (gerente == null)
+            try
             {
-                return NotFound("Gerente não encontrado.");
+                var gerente = await _context.Gerentes.FindAsync(id);
+                if (gerente == null)
+                    return NotFound("Gerente não encontrado.");
+
+                _context.Gerentes.Remove(gerente);
+                await _context.SaveChangesAsync();
+                return Ok("Gerente deletado com sucesso!");
             }
-            _context.Gerentes.Remove(gerente);
-            await _context.SaveChangesAsync();
-            return Ok("Gerente deletado com sucesso!");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao deletar gerente com id {id}.");
+                return StatusCode(500, "Ocorreu um erro ao deletar o gerente.");
+            }
         }
     }
 }
