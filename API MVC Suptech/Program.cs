@@ -6,8 +6,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+
 builder.Services.AddDbContext<CrudData>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,16 +35,29 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API MVC Suptech v1");
+        c.RoutePrefix = "swagger"; // URL = /swagger
+    });
+}
+else
+{
+    // Em produção, ainda queremos o Swagger disponível
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API MVC Suptech v1");
+        c.RoutePrefix = "swagger"; // URL = /swagger
+    });
 }
 
-app.UseHttpsRedirection();
-
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+// Para Vercel, remover o UseHttpsRedirection em produção
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API MVC Suptech v1");
-    c.RoutePrefix = "swagger"; // URL = /swagger
-});
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("policy");
 
