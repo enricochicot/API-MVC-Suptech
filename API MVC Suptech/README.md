@@ -1,25 +1,25 @@
 # API MVC Suptech
 
-API desenvolvida em ASP.NET Core (.NET 9) para gerenciamento de administradores, gerentes, técnicos e usuários.
-Também incluirá o gerenciamento de chamados e uso de IA chatbot em versões futuras
+API desenvolvida em ASP.NET Core (.NET 9) para gerenciamento de administradores, gerentes, tÃ©cnicos e usuÃ¡rios.
+TambÃ©m incluirÃ¡ o gerenciamento de chamados e uso de IA chatbot em versÃµes futuras
 
 ## Funcionalidades
-- Cadastro, edição, listagem e exclusão de administradores, gerentes, técnicos e usuários
-- Autenticação via TokenService
-- Tratamento de exceções com logs
+- Cadastro, ediÃ§Ã£o, listagem e exclusÃ£o de administradores, gerentes, tÃ©cnicos e usuÃ¡rios
+- AutenticaÃ§Ã£o via TokenService
+- Tratamento de exceÃ§Ãµes com logs
 
 ## Estrutura do Projeto
-- Controllers: Lógica das rotas e endpoints
-- Entitys: Entidades do domínio
-- Entitys/Dtos: Objetos de transferência de dados
+- Controllers: LÃ³gica das rotas e endpoints
+- Entitys: Entidades do domÃ­nio
+- Entitys/Dtos: Objetos de transferÃªncia de dados
 - Data: Contexto do Entity Framework (CrudData)
-- Services: Serviços auxiliares (ex: TokenService)
+- Services: ServiÃ§os auxiliares (ex: TokenService)
 
 ## Endpoints Principais
-- `POST /api/Administrador/Adicionar` — Adiciona um administrador
-- `GET /api/Administrador/Listar` — Lista todos os administradores
-- `PUT /api/Administrador/Editar/{id}` — Edita um administrador
-- `DELETE /api/Administrador/Excluir` — Exclui um administrador
+- `POST /api/Administrador/Adicionar` â€” Adiciona um administrador
+- `GET /api/Administrador/Listar` â€” Lista todos os administradores
+- `PUT /api/Administrador/Editar/{id}` â€” Edita um administrador
+- `DELETE /api/Administrador/Excluir` â€” Exclui um administrador
 
 (Repete para Gerente, Tecnico e Usuario)
 
@@ -29,16 +29,16 @@ Também incluirá o gerenciamento de chamados e uso de IA chatbot em versões futur
    ```bash
    dotnet restore
    ```
-3. Execute a aplicação:
+3. Execute a aplicaÃ§Ã£o:
    ```bash
    dotnet run --project "API MVC Suptech/API MVC Suptech.csproj"
    ```
 4. Acesse o Swagger em `https://localhost:{porta}/swagger`
 
-## Observações
+## ObservaÃ§Ãµes
 - O projeto utiliza Entity Framework Core para acesso a dados.
-- O tratamento de erros é feito via try/catch e logs.
+- O tratamento de erros Ã© feito via try/catch e logs.
 - Para editar entidades, utilize o endpoint de busca para preencher o body no Swagger.
 
-## Licença
+## LicenÃ§a
 MIT
