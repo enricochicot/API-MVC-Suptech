@@ -14,7 +14,6 @@
         public string? SolucaoSugeridaPelaIA { get; set; }
         public required int DataFechamento { get; set; }
         public string? SolucaoAplicada { get; set; }
-
         //PKchamado não implementado
     }
 }

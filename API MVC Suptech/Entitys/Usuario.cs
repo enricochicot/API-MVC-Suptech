@@ -4,8 +4,9 @@ namespace API_MVC_Suptech.Entitys
 {
     public class Usuario
     {
+
         [Key]
-        public Guid UsuarioID { get; set; }
+        public Guid UsuarioId { get; set; }
 
         public required string Nome { get; set; }
 

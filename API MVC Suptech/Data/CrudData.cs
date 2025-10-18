@@ -9,7 +9,8 @@ namespace API_MVC_Suptech.Data
         {
         
         }
-        public DbSet<Entitys.Administrador> Administradores { get; set; }
+
+
         public DbSet<Entitys.Gerente> Gerentes { get; set; }
         public DbSet<Entitys.Tecnico> Tecnicos { get; set; }
         public DbSet<Entitys.Usuario> Usuarios { get; set; }
