@@ -6,8 +6,10 @@ namespace API_MVC_Suptech.Entitys.Dtos
     {
         public required string Nome { get; set; }
     
+        [EmailAddress]
         public required string Email { get; set; }
-    
+
+        [MinLength(6)]
         public required string Senha { get; set; }
 
         public required string Setor { get; set; }
