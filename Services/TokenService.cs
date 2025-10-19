@@ -49,7 +49,7 @@ namespace API_MVC_Suptech.Services
             // Adiciona explicitamente a role de gerente
             roles.Add("gerente");
 
-            return BuildToken(gerente.GerenteId.ToString(), gerente.Nome, gerente.Email, roles.Distinct());
+            return BuildToken(gerente.GerenteID.ToString(), gerente.Nome, gerente.Email, roles.Distinct());
         }
 
         // Gera token para Tecnico.
@@ -58,7 +58,7 @@ namespace API_MVC_Suptech.Services
         {
             var roles = new List<string> { "tecnico" };
             // Adiciona a especialidade como claim personalizada (não é usada como role)
-            return BuildToken(tecnico.TecnicoId.ToString(), tecnico.Nome, tecnico.Email, roles, additionalClaims: new[] { new Claim("especialidade", tecnico.Especialidade ?? string.Empty) });
+            return BuildToken(tecnico.TecnicoID.ToString(), tecnico.Nome, tecnico.Email, roles, additionalClaims: new[] { new Claim("especialidade", tecnico.Especialidade ?? string.Empty) });
         }
 
         // Método central que monta o JWT com as claims e assinaturas.

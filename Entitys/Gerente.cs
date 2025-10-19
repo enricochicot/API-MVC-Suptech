@@ -5,7 +5,7 @@ namespace API_MVC_Suptech.Entitys
     public class Gerente
     {
         [Key]
-        public Guid GerenteId { get; set; }
+        public Guid GerenteID { get; set; }
         public required string Nome { get; set; }
 
         [EmailAddress]

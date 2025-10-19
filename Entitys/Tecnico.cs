@@ -5,7 +5,7 @@ namespace API_MVC_Suptech.Entitys
     public class Tecnico
     {
         [Key]
-        public Guid TecnicoId { get; set; } 
+        public Guid TecnicoID { get; set; } 
         public required string Nome { get; set; }
 
         [EmailAddress]
