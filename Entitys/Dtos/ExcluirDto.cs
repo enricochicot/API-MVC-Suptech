@@ -10,5 +10,7 @@
 
         public required Guid TecnicoId { get; set; }
 
+        public required Guid ChamadoID { get; set; }
+
     }
 }

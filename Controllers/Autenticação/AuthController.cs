@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace API_MVC_Suptech.Controllers.Entidades_Controller
+namespace API_MVC_Suptech.Controllers.Autenticação
 {
     [Route("api/[controller]")]
     [ApiController]
