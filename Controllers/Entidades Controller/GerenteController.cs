@@ -92,7 +92,7 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpDelete("Excluir")]
+        [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> DeletarGerente(Guid id)
         {
             try

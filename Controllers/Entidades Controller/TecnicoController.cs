@@ -107,7 +107,7 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpDelete("Deletar/{id}")]
+        [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> DeletarTecnico(Guid id)
         {
             try

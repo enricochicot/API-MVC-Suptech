@@ -2,7 +2,7 @@
 
 namespace API_MVC_Suptech.Entitys.Dtos
 {
-    public class NovoChamado
+    public class NovoChamadoDto
     {
         public required string NomeDoUsuario { get; set; }
 

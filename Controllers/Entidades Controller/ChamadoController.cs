@@ -21,8 +21,8 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             _logger = logger;
         }
 
-        [HttpPost("Adicionar Chamado")]
-        public async Task<IActionResult> AdicionarChamado([FromBody] NovoChamado request)
+        [HttpPost("AdicionarChamado")]
+        public async Task<IActionResult> AdicionarChamado([FromBody] NovoChamadoDto request)
         {
             var novoChamado = new Chamado
             {
@@ -38,7 +38,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             return Ok("Chamado adicionado com sucesso!");
         }
 
-        [HttpGet("Listar Chamados")]
+        [HttpGet("ListarChamados")]
         public async Task<IActionResult> ListarChamados()
         {
             var chamados = await _context.Chamados.ToListAsync();
