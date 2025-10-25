@@ -73,6 +73,13 @@ namespace API_MVC_Suptech.Controllers
                 if (gerente == null)
                     return NotFound("Gerente não encontrado.");
 
+                if (!string.IsNullOrEmpty(request.Email) && request.Email != gerente.Email)
+                {
+                    var emailExists = await _context.Gerentes.AnyAsync(g => g.Email == request.Email);
+                    if (emailExists)
+                        return BadRequest("Email já está em uso por outro gerente.");
+                }
+
                 gerente.Nome = request.Nome ?? gerente.Nome;
                 gerente.Email = request.Email ?? gerente.Email;
                 if (!string.IsNullOrEmpty(request.Senha))

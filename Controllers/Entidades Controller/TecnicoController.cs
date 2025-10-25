@@ -82,7 +82,17 @@ namespace API_MVC_Suptech.Controllers
             {
                 return NotFound("Técnico não encontrado.");
             }
-            tecnico.Nome = request.Nome;
+
+            if(tecnico.Email != request.Email)
+            {
+                var emailExists = await _context.Tecnicos.AnyAsync(t => t.Email == request.Email);
+                if (emailExists)
+                {
+                    return BadRequest("Email já está em uso por outro técnico.");
+                }
+                }
+
+                tecnico.Nome = request.Nome;
             tecnico.Email = request.Email;
             if (!string.IsNullOrEmpty(request.Senha))
             {

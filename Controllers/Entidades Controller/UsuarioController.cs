@@ -88,6 +88,15 @@ namespace API_MVC_Suptech.Controllers
                     return NotFound("Usuário não encontrado.");
                 }
 
+                if(!string.IsNullOrEmpty(request.Email) && request.Email != usuario.Email)
+                {
+                    var emailExists = await _context.Usuarios.AnyAsync(u => u.Email == request.Email);
+                    if (emailExists)
+                    {
+                        return BadRequest("Email já está em uso por outro usuário.");
+                    }
+                }
+
                 usuario.Nome = request.Nome ?? usuario.Nome;
                 usuario.Email = request.Email ?? usuario.Email;
                 if (!string.IsNullOrEmpty(request.Senha))

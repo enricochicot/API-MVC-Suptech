@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace API_MVC_Suptech.Entitys
 {
@@ -8,8 +9,6 @@ namespace API_MVC_Suptech.Entitys
         public Guid UsuarioID { get; set; }
 
         public required string Nome { get; set; }
-
-        [EmailAddress]
         public required string Email { get; set; }
 
         [MinLength(6)]
