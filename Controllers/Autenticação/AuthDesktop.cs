@@ -22,7 +22,7 @@ namespace API_MVC_Suptech.Controllers.Autenticação
             _logger = logger;
             _env = env;
         }
-        [HttpPost("Login Desktop")]
+        [HttpPost("LoginDesktop")]
         public async Task<IActionResult> LoginDesktop([FromBody] LoginDto request)
         {
             try
