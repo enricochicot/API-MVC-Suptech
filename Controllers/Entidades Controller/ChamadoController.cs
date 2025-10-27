@@ -44,5 +44,38 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             var chamados = await _context.Chamados.ToListAsync();
             return Ok(chamados);
         }
+
+        [HttpPut("Editar/{id}")]
+        public async Task<IActionResult> EditarChamado(Guid id, [FromBody] EditarChamadoDto request)
+        {
+            var chamado = await _context.Chamados.FindAsync(id);
+            if (chamado == null)
+            {
+                return NotFound("Chamado não encontrado.");
+            }
+
+            chamado.NomeDoUsuario = request.NomeDoUsuario ?? chamado.NomeDoUsuario;
+            chamado.EmailDoUsuario = request.EmailDoUsuario ?? chamado.EmailDoUsuario;
+            chamado.SetorDoUsuario = request.SetorDoUsuario ?? chamado.SetorDoUsuario;
+            chamado.Titulo = request.Titulo ?? chamado.Titulo;
+            chamado.Descricao = request.Descricao ?? chamado.Descricao;
+            chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
+            await _context.SaveChangesAsync();
+            return Ok("Chamado editado com sucesso!");
+        }   
+
+
+        [HttpDelete("Excluir/{id}")]
+        public async Task<IActionResult> ExcluirChamado(Guid id)
+        {
+            var chamado = await _context.Chamados.FindAsync(id);
+            if (chamado == null)
+            {
+                return NotFound("Chamado não encontrado.");
+            }
+            _context.Chamados.Remove(chamado);
+            await _context.SaveChangesAsync();
+            return Ok("Chamado excluído com sucesso!");
+        }
     }
 }
