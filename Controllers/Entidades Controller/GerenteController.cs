@@ -54,7 +54,13 @@ namespace API_MVC_Suptech.Controllers
         {
             try
             {
-                var gerentes = await _context.Gerentes.ToListAsync();
+                var gerentes = await _context.Gerentes.Select(g => new
+                {
+                    g.Nome,
+                    g.Email,
+                    g.Setor,
+                    g.Telefone
+                }).ToListAsync();
                 return Ok(gerentes);
             }
             catch (Exception ex)

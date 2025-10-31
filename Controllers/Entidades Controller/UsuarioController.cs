@@ -68,7 +68,15 @@ namespace API_MVC_Suptech.Controllers
         {
             try
             {
-                var usuarios = await _context.Usuarios.ToListAsync();
+                var usuarios = await _context.Usuarios
+                    .Select(u => new
+                    {
+                        u.Nome,
+                        u.Email,
+                        u.Setor,
+                        u.Telefone
+                    })
+                    .ToListAsync();
                 return Ok(usuarios);
             }
             catch (Exception ex)
