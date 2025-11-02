@@ -24,6 +24,15 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarChamado([FromBody] NovoChamadoDto request)
         {
+            try
+            {
+            var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
+
+            if (!statusPermitido.Contains(request.Status))
+            {
+                return BadRequest("Status inválido.");
+            }
+
             var novoChamado = new Chamado
             {
                 NomeDoUsuario = request.NomeDoUsuario,
@@ -31,27 +40,56 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 SetorDoUsuario = request.SetorDoUsuario,
                 Titulo = request.Titulo,
                 Descricao = request.Descricao,
-                Prioridade = request.Prioridade
+                Prioridade = request.Prioridade,
+                Status = request.Status
+
             };
             _context.Chamados.Add(novoChamado);
             await _context.SaveChangesAsync();
             return Ok("Chamado adicionado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao adicionar chamado.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
         }
 
         [HttpGet("Listar")]
         public async Task<IActionResult> ListarChamados()
         {
+            try
+            {
             var chamados = await _context.Chamados.ToListAsync();
             return Ok(chamados);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao listar chamados.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
         }
 
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarChamado(Guid id, [FromBody] EditarChamadoDto request)
         {
+            try
+            {
             var chamado = await _context.Chamados.FindAsync(id);
             if (chamado == null)
             {
                 return NotFound("Chamado não encontrado.");
+            }
+
+            // Validação do status, se fornecido 
+            if (!string.IsNullOrEmpty(request.Status))
+            {
+                var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
+                if (!statusPermitido.Contains(request.Status))
+                {
+                    return BadRequest("Status inválido.");
+                }
+                chamado.Status = request.Status;
             }
 
             chamado.NomeDoUsuario = request.NomeDoUsuario ?? chamado.NomeDoUsuario;
@@ -60,22 +98,37 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             chamado.Titulo = request.Titulo ?? chamado.Titulo;
             chamado.Descricao = request.Descricao ?? chamado.Descricao;
             chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
+            chamado.Status = request.Status ?? chamado.Status;
             await _context.SaveChangesAsync();
             return Ok("Chamado editado com sucesso!");
-        }   
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao editar chamado com id {id}.");
+                return StatusCode(500, "Ocorreu um erro ao editar o chamado.");
+            }
+        }
 
 
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> ExcluirChamado(Guid id)
         {
-            var chamado = await _context.Chamados.FindAsync(id);
-            if (chamado == null)
+            try
             {
-                return NotFound("Chamado não encontrado.");
+                var chamado = await _context.Chamados.FindAsync(id);
+                if (chamado == null)
+                {
+                    return NotFound("Chamado não encontrado.");
+                }
+                _context.Chamados.Remove(chamado);
+                await _context.SaveChangesAsync();
+                return Ok("Chamado excluído com sucesso!");
             }
-            _context.Chamados.Remove(chamado);
-            await _context.SaveChangesAsync();
-            return Ok("Chamado excluído com sucesso!");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao excluir chamado com id {id}.");
+                return StatusCode(500, "Ocorreu um erro ao excluir o chamado.");
+            }
         }
     }
 }

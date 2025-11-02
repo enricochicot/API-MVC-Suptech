@@ -15,8 +15,9 @@ namespace API_MVC_Suptech.Entitys
         public required string Titulo { get; set; }
         public required string Descricao { get; set; }
         public required string Prioridade { get; set; }
+        public required string Status { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime DataAbertura { get; set; }
+        public DateTime DataAbertura { get; set; } = DateTime.Now;
     }
 }

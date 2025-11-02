@@ -22,5 +22,8 @@ namespace API_MVC_Suptech.Entitys.Dtos
 
         [Required(ErrorMessage = "Este campo deve possuir a prioridade do chamado")]
         public required string Prioridade { get; set; }
+
+        [Required(ErrorMessage = "Este campo deve possuir o status do chamado")]
+        public required string Status { get; set; } 
     }
 }
