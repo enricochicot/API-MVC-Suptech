@@ -42,7 +42,6 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                     Descricao = request.Descricao,
                     Prioridade = request.Prioridade,
                     Status = request.Status
-
                 };
                 _context.Chamados.Add(novoChamado);
                 await _context.SaveChangesAsync();
