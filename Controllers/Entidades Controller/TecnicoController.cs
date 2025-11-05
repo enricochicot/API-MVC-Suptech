@@ -82,39 +82,40 @@ namespace API_MVC_Suptech.Controllers
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] NovoTecnicoDto request)
         {
-            try { 
-            var tecnico = await _context.Tecnicos.FindAsync(id);
-            if (tecnico == null)
-            {
-                return NotFound("Técnico não encontrado.");
-            }
-
-            if(tecnico.Email != request.Email)
-            {
-                var emailExists = await _context.Tecnicos.AnyAsync(t => t.Email == request.Email);
-                if (emailExists)
+            try
+            { 
+                var tecnico = await _context.Tecnicos.FindAsync(id);
+                if (tecnico == null)
                 {
-                    return BadRequest("Email já está em uso por outro técnico.");
-                }
+                    return NotFound("Técnico não encontrado.");
                 }
 
-                tecnico.Nome = request.Nome;
-            tecnico.Email = request.Email;
-            if (!string.IsNullOrEmpty(request.Senha))
-            {
-                tecnico.Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha);
-            }
-            tecnico.Especialidade = request.Especialidade;
-            tecnico.Telefone = request.Telefone;
+                if(tecnico.Email != request.Email)
+                {
+                    var emailExists = await _context.Tecnicos.AnyAsync(t => t.Email == request.Email);
+                    if (emailExists)
+                    {
+                        return BadRequest("Email já está em uso por outro técnico.");
+                    }
+                    }
 
-            if (string.IsNullOrEmpty(tecnico.Nome) || string.IsNullOrEmpty(tecnico.Email)
-               || string.IsNullOrEmpty(tecnico.Senha))
-            {
-                return BadRequest("Nome, Email e Senha são obrigatórios.");
-            }
-            _context.Tecnicos.Update(tecnico);
-            await _context.SaveChangesAsync();
-            return Ok("Técnico atualizado com sucesso!");
+                    tecnico.Nome = request.Nome;
+                tecnico.Email = request.Email;
+                if (!string.IsNullOrEmpty(request.Senha))
+                {
+                    tecnico.Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha);
+                }
+                tecnico.Especialidade = request.Especialidade;
+                tecnico.Telefone = request.Telefone;
+
+                if (string.IsNullOrEmpty(tecnico.Nome) || string.IsNullOrEmpty(tecnico.Email)
+                || string.IsNullOrEmpty(tecnico.Senha))
+                {
+                    return BadRequest("Nome, Email e Senha são obrigatórios.");
+                }
+                _context.Tecnicos.Update(tecnico);
+                await _context.SaveChangesAsync();
+                return Ok("Técnico atualizado com sucesso!");
             }
             catch (Exception ex)
             {

@@ -26,27 +26,27 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         {
             try
             {
-            var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
+                var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
 
-            if (!statusPermitido.Contains(request.Status))
-            {
-                return BadRequest("Status inválido.");
-            }
+                if (!statusPermitido.Contains(request.Status))
+                {
+                    return BadRequest("Status inválido.");
+                }
 
-            var novoChamado = new Chamado
-            {
-                NomeDoUsuario = request.NomeDoUsuario,
-                EmailDoUsuario = request.EmailDoUsuario,
-                SetorDoUsuario = request.SetorDoUsuario,
-                Titulo = request.Titulo,
-                Descricao = request.Descricao,
-                Prioridade = request.Prioridade,
-                Status = request.Status
+                var novoChamado = new Chamado
+                {
+                    NomeDoUsuario = request.NomeDoUsuario,
+                    EmailDoUsuario = request.EmailDoUsuario,
+                    SetorDoUsuario = request.SetorDoUsuario,
+                    Titulo = request.Titulo,
+                    Descricao = request.Descricao,
+                    Prioridade = request.Prioridade,
+                    Status = request.Status
 
-            };
-            _context.Chamados.Add(novoChamado);
-            await _context.SaveChangesAsync();
-            return Ok("Chamado adicionado com sucesso!");
+                };
+                _context.Chamados.Add(novoChamado);
+                await _context.SaveChangesAsync();
+                return Ok("Chamado adicionado com sucesso!");
             }
             catch (Exception ex)
             {
@@ -60,8 +60,8 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         {
             try
             {
-            var chamados = await _context.Chamados.ToListAsync();
-            return Ok(chamados);
+                var chamados = await _context.Chamados.ToListAsync();
+                return Ok(chamados);
             }
             catch (Exception ex)
             {
@@ -75,32 +75,32 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         {
             try
             {
-            var chamado = await _context.Chamados.FindAsync(id);
-            if (chamado == null)
-            {
-                return NotFound("Chamado não encontrado.");
-            }
-
-            // Validação do status, se fornecido 
-            if (!string.IsNullOrEmpty(request.Status))
-            {
-                var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
-                if (!statusPermitido.Contains(request.Status))
+                var chamado = await _context.Chamados.FindAsync(id);
+                if (chamado == null)
                 {
-                    return BadRequest("Status inválido.");
+                    return NotFound("Chamado não encontrado.");
                 }
-                chamado.Status = request.Status;
-            }
 
-            chamado.NomeDoUsuario = request.NomeDoUsuario ?? chamado.NomeDoUsuario;
-            chamado.EmailDoUsuario = request.EmailDoUsuario ?? chamado.EmailDoUsuario;
-            chamado.SetorDoUsuario = request.SetorDoUsuario ?? chamado.SetorDoUsuario;
-            chamado.Titulo = request.Titulo ?? chamado.Titulo;
-            chamado.Descricao = request.Descricao ?? chamado.Descricao;
-            chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
-            chamado.Status = request.Status ?? chamado.Status;
-            await _context.SaveChangesAsync();
-            return Ok("Chamado editado com sucesso!");
+                // Validação do status, se fornecido 
+                if (!string.IsNullOrEmpty(request.Status))
+                {
+                    var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
+                    if (!statusPermitido.Contains(request.Status))
+                    {
+                        return BadRequest("Status inválido.");
+                    }
+                    chamado.Status = request.Status;
+                }
+
+                chamado.NomeDoUsuario = request.NomeDoUsuario ?? chamado.NomeDoUsuario;
+                chamado.EmailDoUsuario = request.EmailDoUsuario ?? chamado.EmailDoUsuario;
+                chamado.SetorDoUsuario = request.SetorDoUsuario ?? chamado.SetorDoUsuario;
+                chamado.Titulo = request.Titulo ?? chamado.Titulo;
+                chamado.Descricao = request.Descricao ?? chamado.Descricao;
+                chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
+                chamado.Status = request.Status ?? chamado.Status;
+                await _context.SaveChangesAsync();
+                return Ok("Chamado editado com sucesso!");
             }
             catch (Exception ex)
             {

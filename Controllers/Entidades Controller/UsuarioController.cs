@@ -89,7 +89,8 @@ namespace API_MVC_Suptech.Controllers
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarUsuario(Guid id, [FromBody] EditarDto request)
         {
-            try { 
+            try
+            { 
                 var usuario = await _context.Usuarios.FindAsync(id);
                 if (usuario == null)
                 {
@@ -116,12 +117,12 @@ namespace API_MVC_Suptech.Controllers
 
                 await _context.SaveChangesAsync();
                 return Ok("Usuário atualizado com sucesso!");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Erro ao editar usuário.");
-                    return StatusCode(500, "Ocorreu um erro interno no servidor.");
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao editar usuário.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
         }
 
         [HttpDelete("Excluir/{id}")]
@@ -129,15 +130,15 @@ namespace API_MVC_Suptech.Controllers
         {
             try
             {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound("Usuário não encontrado.");
-            }
+                var usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound("Usuário não encontrado.");
+                }
 
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
-            return Ok("Usuário excluído com sucesso!");
+                _context.Usuarios.Remove(usuario);
+                await _context.SaveChangesAsync();
+                return Ok("Usuário excluído com sucesso!");
             }
             catch (Exception ex)
             {
