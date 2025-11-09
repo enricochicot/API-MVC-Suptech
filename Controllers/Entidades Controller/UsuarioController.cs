@@ -86,6 +86,34 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
+        [HttpGet("Obter/{id}")]
+        public async Task<IActionResult> ObterUsuario(Guid id)
+        {
+            try
+            {
+                var usuario = await _context.Usuarios
+                    .Where(u => u.UsuarioID == id)
+                    .Select(u => new
+                    {
+                        u.Nome,
+                        u.Email,
+                        u.Setor,
+                        u.Telefone
+                    })
+                    .FirstOrDefaultAsync();
+                if (usuario == null)
+                {
+                    return NotFound("Usuário não encontrado.");
+                }
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao obter usuário.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
+        }
+
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarUsuario(Guid id, [FromBody] EditarDto request)
         {

@@ -70,6 +70,32 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
+        [HttpGet("Obter/{id}")]
+        public async Task<IActionResult> ObterGerente(Guid id)
+        {
+            try
+            {
+                var gerente = await _context.Gerentes
+                    .Where(g => g.GerenteID == id)
+                    .Select(g => new
+                    {
+                        g.Nome,
+                        g.Email,
+                        g.Setor,
+                        g.Telefone
+                    })
+                    .FirstOrDefaultAsync();
+                if (gerente == null)
+                    return NotFound("Gerente não encontrado.");
+                return Ok(gerente);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao obter gerente com id {id}.");
+                return StatusCode(500, "Ocorreu um erro ao obter o gerente.");
+            }
+        }
+
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarGerente(Guid id, [FromBody] EditarDto request)
         {

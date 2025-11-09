@@ -79,6 +79,31 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
+        [HttpGet("Obter/{id}")]
+        public async Task<IActionResult> ObterTecnico(Guid id)
+        {
+            try
+            {
+                var tecnico = await _context.Tecnicos.FindAsync(id);
+                if (tecnico == null)
+                {
+                    return NotFound("Técnico não encontrado.");
+                }
+                return Ok(new
+                {
+                    tecnico.Nome,
+                    tecnico.Email,
+                    tecnico.Especialidade,
+                    tecnico.Telefone
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao obter técnico.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
+        }
+
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] NovoTecnicoDto request)
         {

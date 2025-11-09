@@ -75,6 +75,25 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             }
         }
 
+        [HttpGet("Obter/{id}")]
+        public async Task<IActionResult> ObterChamadoPorId(Guid id)
+        {
+            try
+            {
+                var chamado = await _context.Chamados.FindAsync(id);
+                if (chamado == null)
+                {
+                    return NotFound("Chamado não encontrado.");
+                }
+                return Ok(chamado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao obter chamado com id {id}.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
+        }
+
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarChamado(Guid id, [FromBody] EditarChamadoDto request)
         {
