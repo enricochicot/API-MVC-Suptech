@@ -33,6 +33,12 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                     return BadRequest("Status inválido.");
                 }
 
+                var prioridadePermitida = new[] { "Baixa", "Média", "Alta" };
+                if (!prioridadePermitida.Contains(request.Prioridade))
+                {
+                    return BadRequest("Prioridade inválida.");
+                }
+
                 var novoChamado = new Chamado
                 {
                     NomeDoUsuario = request.NomeDoUsuario,
@@ -89,6 +95,17 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                         return BadRequest("Status inválido.");
                     }
                     chamado.Status = request.Status;
+                }
+
+                // Validação da prioridade, se fornecida
+                if (!string.IsNullOrEmpty(request.Prioridade))
+                {
+                    var prioridadePermitida = new[] { "Baixa", "Média", "Alta" };
+                    if (!prioridadePermitida.Contains(request.Prioridade))
+                    {
+                        return BadRequest("Prioridade inválida.");
+                    }
+                    chamado.Prioridade = request.Prioridade;
                 }
 
                 chamado.NomeDoUsuario = request.NomeDoUsuario ?? chamado.NomeDoUsuario;
