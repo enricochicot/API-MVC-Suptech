@@ -70,13 +70,13 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpGet("Obter/{id}")]
-        public async Task<IActionResult> ObterGerente(Guid id)
+        [HttpGet("ObterPorEmail/{email}")]
+        public async Task<IActionResult> ObterUsuarioPorEmail(string email)
         {
             try
             {
                 var gerente = await _context.Gerentes
-                    .Where(g => g.GerenteID == id)
+                    .Where(g => g.Email == email)
                     .Select(g => new
                     {
                         g.Nome,
@@ -91,10 +91,11 @@ namespace API_MVC_Suptech.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao obter gerente com id {id}.");
+                _logger.LogError(ex, $"Erro ao obter gerente com email {email}.");
                 return StatusCode(500, "Ocorreu um erro ao obter o gerente.");
             }
         }
+
 
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarGerente(Guid id, [FromBody] EditarDto request)

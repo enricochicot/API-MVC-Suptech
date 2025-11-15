@@ -79,27 +79,30 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpGet("Obter/{id}")]
-        public async Task<IActionResult> ObterTecnico(Guid id)
+        [HttpGet("ObterPorEmail/{email}")]
+        public async Task<IActionResult> ObterTecnicoPorEmail(string email)
         {
             try
             {
-                var tecnico = await _context.Tecnicos.FindAsync(id);
+                var tecnico = await _context.Tecnicos
+                    .Where(t => t.Email == email)
+                    .Select(t => new
+                    {
+                        t.Nome,
+                        t.Email,
+                        t.Especialidade,
+                        t.Telefone
+                    })
+                    .FirstOrDefaultAsync();
                 if (tecnico == null)
                 {
                     return NotFound("Técnico não encontrado.");
                 }
-                return Ok(new
-                {
-                    tecnico.Nome,
-                    tecnico.Email,
-                    tecnico.Especialidade,
-                    tecnico.Telefone
-                });
+                return Ok(tecnico);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao obter técnico.");
+                _logger.LogError(ex, "Erro ao obter técnico por email.");
                 return StatusCode(500, "Ocorreu um erro interno no servidor.");
             }
         }

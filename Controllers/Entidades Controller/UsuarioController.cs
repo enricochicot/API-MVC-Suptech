@@ -86,13 +86,13 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpGet("Obter/{id}")]
-        public async Task<IActionResult> ObterUsuario(Guid id)
+        [HttpGet("ObterPorEmail/{email}")]
+        public async Task<IActionResult> ObterUsuarioPorEmail(string email)
         {
             try
             {
                 var usuario = await _context.Usuarios
-                    .Where(u => u.UsuarioID == id)
+                    .Where(u => u.Email == email)
                     .Select(u => new
                     {
                         u.Nome,
@@ -109,7 +109,7 @@ namespace API_MVC_Suptech.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao obter usuário.");
+                _logger.LogError(ex, "Erro ao obter usuário por email.");
                 return StatusCode(500, "Ocorreu um erro interno no servidor.");
             }
         }
