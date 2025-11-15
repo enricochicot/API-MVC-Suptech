@@ -1,13 +1,14 @@
 ﻿using API_MVC_Suptech.Data;
 using API_MVC_Suptech.Entitys;
 using API_MVC_Suptech.Entitys.Dtos;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace API_MVC_Suptech.Controllers.Entidades_Controller
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ChamadoController : Controller

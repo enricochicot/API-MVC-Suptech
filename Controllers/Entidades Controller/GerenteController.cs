@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API_MVC_Suptech.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Authorize] // Protege todos os endpoints por padrão
+    [Route("api/[controller]")] 
+    [ApiController] 
     public class GerenteController : ControllerBase
     {
         private readonly CrudData _context;
@@ -21,9 +23,12 @@ namespace API_MVC_Suptech.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous] // Permite acesso sem autenticação
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarGerente([FromBody] NovoGerenteDto request)
         {
+            _logger.LogInformation("Tentativa de adicionar gerente com email: {Email}", request.Email);
+
             try
             {
                 var existing = await _context.Gerentes.FirstOrDefaultAsync(a => a.Email == request.Email);
@@ -52,6 +57,8 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("Listar")]
         public async Task<IActionResult> ListarGerentes()
         {
+            _logger.LogInformation("Listando todos os gerentes.");
+
             try
             {
                 var gerentes = await _context.Gerentes.Select(g => new
@@ -73,6 +80,8 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("ObterPorEmail/{email}")]
         public async Task<IActionResult> ObterUsuarioPorEmail(string email)
         {
+            _logger.LogInformation("Obtendo gerente com email: {Email}", email);
+
             try
             {
                 var gerente = await _context.Gerentes
@@ -85,8 +94,10 @@ namespace API_MVC_Suptech.Controllers
                         g.Telefone
                     })
                     .FirstOrDefaultAsync();
+
                 if (gerente == null)
                     return NotFound("Gerente não encontrado.");
+
                 return Ok(gerente);
             }
             catch (Exception ex)
@@ -100,6 +111,8 @@ namespace API_MVC_Suptech.Controllers
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarGerente(Guid id, [FromBody] EditarDto request)
         {
+            _logger.LogInformation("Tentativa de editar gerente com id: {Id}", id);
+
             try
             {
                 var gerente = await _context.Gerentes.FindAsync(id);
@@ -132,9 +145,12 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
+        [Authorize(Roles = "Gerente")]
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> DeletarGerente(Guid id)
         {
+            _logger.LogInformation("Tentativa de deletar gerente com id: {Id}", id);
+
             try
             {
                 var gerente = await _context.Gerentes.FindAsync(id);
@@ -153,3 +169,23 @@ namespace API_MVC_Suptech.Controllers
         }
     }
 }
+
+
+
+
+//Oque esta sendo feito agora? 
+
+//	[Authorize] no controller - protege todos os endpoints por padrão
+//  [AllowAnonymous] no Adicionar - permite cadastro sem token
+//	[Authorize(Roles = "gerente")] no Excluir - apenas gerentes podem deletar
+//	Logs de informação - registram ações normais (listar, consultar, editar)
+//	Logs de aviso - registram tentativas suspeitas (email duplicado, registro não encontrado, exclusões)
+//	Logs de erro - já existiam, mas agora com mais contexto
+//	Identifica o usuário - captura o UserId de quem está fazendo a ação
+
+//Benefícios:
+
+// Auditoria completa - rastreie quem fez o quê e quando
+// Segurança - detecte tentativas suspeitas
+// Debugging - facilita identificar problemas
+// Compliance - atende requisitos de rastreabilidade
