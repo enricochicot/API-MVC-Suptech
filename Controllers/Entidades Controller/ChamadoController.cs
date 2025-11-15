@@ -75,22 +75,24 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             }
         }
 
-        [HttpGet("Obter/{id}")]
-        public async Task<IActionResult> ObterChamadoPorId(Guid id)
+        [HttpGet("ObterChamadoPorEmail/{email}")]
+        public async Task<IActionResult> ObterChamadoPorEmail(string email)
         {
             try
             {
-                var chamado = await _context.Chamados.FindAsync(id);
-                if (chamado == null)
+                var chamado = await _context.Chamados
+                    .Where(c => c.EmailDoUsuario == email)
+                    .ToListAsync();
+                if (chamado == null || chamado.Count == 0)
                 {
-                    return NotFound("Chamado não encontrado.");
+                    return NotFound("Chamado não encontrado para o email fornecido.");
                 }
                 return Ok(chamado);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao obter chamado com id {id}.");
-                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+                _logger.LogError(ex, $"Erro ao obter chamado por email: {email}.");
+                return StatusCode(500, "Ocorreu um erro ao obter o chamado.");
             }
         }
 
