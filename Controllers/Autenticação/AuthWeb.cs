@@ -26,7 +26,6 @@ namespace API_MVC_Suptech.Controllers.Autenticação
             _env = env;
         }
 
-        [Authorize]
         [HttpPost("LoginWeb")]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
@@ -69,7 +68,6 @@ namespace API_MVC_Suptech.Controllers.Autenticação
         /// <summary>
         /// Decodifica o token e retorna apenas o email
         /// </summary>
-        [AllowAnonymous]
         [HttpPost("ObterEmail")]
         public IActionResult ObterEmailDoToken([FromBody] TokenRequestDto request)
         {
