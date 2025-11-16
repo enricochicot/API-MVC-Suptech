@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\IA\**" />
+    <Content Remove="Services\IA\**" />
+    <EmbeddedResource Remove="Services\IA\**" />
+    <None Remove="Services\IA\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Entitys\Dtos\ListarDto.cs" />
   </ItemGroup>
 
@@ -23,10 +30,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.6" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\IA\" />
   </ItemGroup>
 
 </Project>

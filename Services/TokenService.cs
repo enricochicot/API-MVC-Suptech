@@ -61,6 +61,7 @@ namespace API_MVC_Suptech.Services
             return BuildToken(tecnico.TecnicoID.ToString(), tecnico.Nome, tecnico.Email, roles, additionalClaims: new[] { new Claim("especialidade", tecnico.Especialidade ?? string.Empty) });
         }
 
+
         // Método central que monta o JWT com as claims e assinaturas.
         // Lê as configurações em Jwt:Key, Jwt:Issuer, Jwt:Audience e usa apenas Jwt:ExpireHours para expiração
         private string BuildToken(string id, string nome, string email, IEnumerable<string> roles, IEnumerable<Claim>? additionalClaims = null)

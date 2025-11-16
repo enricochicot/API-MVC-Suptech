@@ -1,9 +1,12 @@
 ﻿using API_MVC_Suptech.Data;
 using API_MVC_Suptech.Entitys.Dtos;
 using API_MVC_Suptech.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace API_MVC_Suptech.Controllers.Autenticação
 {
@@ -11,10 +14,10 @@ namespace API_MVC_Suptech.Controllers.Autenticação
     [ApiController]
     public class AuthController : ControllerBase
     {
-       private readonly CrudData _context;
-       private readonly TokenService _tokenService;
-       private readonly ILogger<AuthController> _logger;
-       private readonly IWebHostEnvironment _env;
+        private readonly CrudData _context;
+        private readonly TokenService _tokenService;
+        private readonly ILogger<AuthController> _logger;
+        private readonly IWebHostEnvironment _env;
         public AuthController(CrudData context, TokenService tokenService, ILogger<AuthController> logger, IWebHostEnvironment env)
         {
             _context = context;
@@ -23,7 +26,8 @@ namespace API_MVC_Suptech.Controllers.Autenticação
             _env = env;
         }
 
-        [HttpPost("Login")]
+        [Authorize]
+        [HttpPost("LoginWeb")]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
             try
@@ -54,7 +58,7 @@ namespace API_MVC_Suptech.Controllers.Autenticação
                 _logger.LogError(ex, "Erro durante o login.");
 
                 // Em Development, retorna detalhes para ajudar depuração
-                if (_env.IsDevelopment()    )
+                if (_env.IsDevelopment())
                 {
                     return StatusCode(500, new { Message = "Erro interno no servidor.", Detail = ex.ToString() });
                 }
@@ -62,7 +66,46 @@ namespace API_MVC_Suptech.Controllers.Autenticação
                 return StatusCode(500, "Ocorreu um erro interno no servidor.");
             }
         }
+        /// <summary>
+        /// Decodifica o token e retorna apenas o email
+        /// </summary>
+        [AllowAnonymous]
+        [HttpPost("ObterEmail")]
+        public IActionResult ObterEmailDoToken([FromBody] TokenRequestDto request)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.Token))
+                {
+                    return BadRequest("Token não fornecido.");
+                }
 
+                var handler = new JwtSecurityTokenHandler();
 
+                // Verifica se é um token válido
+                if (!handler.CanReadToken(request.Token))
+                {
+                    return BadRequest("Token inválido.");
+                }
+
+                // Decodifica o token
+                var jwtToken = handler.ReadJwtToken(request.Token);
+
+                // Extrai apenas o email
+                var email = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    return NotFound("Email não encontrado no token.");
+                }
+
+                return Ok(new { Email = email });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao decodificar token.");
+                return StatusCode(500, "Erro ao processar o token.");
+            }
+        }
     }
 }
