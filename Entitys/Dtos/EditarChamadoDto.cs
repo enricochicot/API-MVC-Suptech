@@ -14,5 +14,7 @@ namespace API_MVC_Suptech.Entitys.Dtos
         public string? Descricao { get; set; }
         public string? Prioridade { get; set; }
         public string? Status { get; set; }
+        public string? RespostaTecnico { get; set; }
+
     }
 }

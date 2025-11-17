@@ -24,6 +24,9 @@ namespace API_MVC_Suptech.Entitys.Dtos
         public required string Prioridade { get; set; }
 
         [Required(ErrorMessage = "Este campo deve possuir o status do chamado")]
-        public required string Status { get; set; } 
+        public required string Status { get; set; }
+
+        [Required(ErrorMessage = "Este campo deve possuir a resposta do técnico")]
+        public string? RespostaTecnico { get; set; }
     }
 }

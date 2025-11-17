@@ -37,12 +37,7 @@ namespace API_MVC_Suptech.Controllers.Autenticação
                     var token = _tokenService.GenerateToken(usuario);
                     return Ok(new { Token = token });
                 }
-                var gerente = await _context.Gerentes.FirstOrDefaultAsync(g => g.Email == request.Email);
-                if (gerente != null && BCrypt.Net.BCrypt.Verify(request.Senha, gerente.Senha))
-                {
-                    var token = _tokenService.GenerateToken(gerente);
-                    return Ok(new { Token = token });
-                }
+
                 var tecnico = await _context.Tecnicos.FirstOrDefaultAsync(t => t.Email == request.Email);
                 if (tecnico != null && BCrypt.Net.BCrypt.Verify(request.Senha, tecnico.Senha))
                 {

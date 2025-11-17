@@ -48,7 +48,8 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                     Titulo = request.Titulo,
                     Descricao = request.Descricao,
                     Prioridade = request.Prioridade,
-                    Status = request.Status
+                    Status = request.Status,
+                    RespostaTecnico = request.RespostaTecnico
                 };
                 _context.Chamados.Add(novoChamado);
                 await _context.SaveChangesAsync();
@@ -72,9 +73,10 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao listar chamados.");
-                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+                return StatusCode(500, "Ocorreu um erro ao listar os chamados.");
             }
         }
+
 
         [HttpGet("ObterChamadoPorEmail/{email}")]
         public async Task<IActionResult> ObterChamadoPorEmail(string email)
@@ -137,6 +139,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 chamado.Descricao = request.Descricao ?? chamado.Descricao;
                 chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
                 chamado.Status = request.Status ?? chamado.Status;
+                chamado.RespostaTecnico = request.RespostaTecnico ?? chamado.RespostaTecnico;
                 await _context.SaveChangesAsync();
                 return Ok("Chamado editado com sucesso!");
             }
