@@ -25,6 +25,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarChamado([FromBody] NovoChamadoDto request)
         {
+            _logger.LogInformation("Iniciando o processo de adição de um novo chamado.");
             try
             {
                 var statusPermitido = new[] { "Aberto", "Pendente", "Fechado" };
@@ -102,6 +103,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarChamado(Guid id, [FromBody] EditarChamadoDto request)
         {
+            _logger.LogInformation($"Iniciando o processo de edição do chamado com id.");
             try
             {
                 var chamado = await _context.Chamados.FindAsync(id);
@@ -154,6 +156,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> ExcluirChamado(Guid id)
         {
+            _logger.LogInformation($"Iniciando o processo de exclusão do chamado com id.");
             try
             {
                 var chamado = await _context.Chamados.FindAsync(id);

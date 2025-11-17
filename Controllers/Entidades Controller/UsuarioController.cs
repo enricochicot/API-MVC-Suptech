@@ -32,6 +32,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarUsuario([FromBody] NovoUsuarioDto request)
         {
+            _logger.LogInformation("Iniciando o processo de adição de um novo usuário.");
             try
             {
                 var existingUser = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == request.Email);
@@ -134,6 +135,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarUsuario(Guid id, [FromBody] EditarDto request)
         {
+            _logger.LogInformation("Iniciando o processo de edição do usuário.");
             try
             { 
                 var usuario = await _context.Usuarios.FindAsync(id);
@@ -173,6 +175,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> ExcluirUsuario(Guid id)
         {
+            _logger.LogInformation("Iniciando o processo de exclusão do usuário.");
             try
             {
                 var usuario = await _context.Usuarios.FindAsync(id);

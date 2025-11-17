@@ -27,8 +27,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarGerente([FromBody] NovoGerenteDto request)
         {
-            _logger.LogInformation("Tentativa de adicionar gerente com email: {Email}", request.Email);
-
+            _logger.LogInformation("Tentativa de adicionar gerente com email.");
             try
             {
                 var existing = await _context.Gerentes.FirstOrDefaultAsync(a => a.Email == request.Email);
@@ -57,7 +56,6 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("ListarGerentesDesktop")]
         public async Task<IActionResult> ListarGerentesDesktop()
         {
-            _logger.LogInformation("Listando todos os gerentes para desktop.");
             try
             {
                 var gerentes = await _context.Gerentes.ToListAsync();
@@ -73,8 +71,6 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("ListarGerentesWeb")]
         public async Task<IActionResult> ListarGerentes()
         {
-            _logger.LogInformation("Listando todos os gerentes.");
-
             try
             {
                 var gerentes = await _context.Gerentes.Select(g => new
@@ -96,8 +92,6 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("ObterPorEmail/{email}")]
         public async Task<IActionResult> ObterUsuarioPorEmail(string email)
         {
-            _logger.LogInformation("Obtendo gerente com email: {Email}", email);
-
             try
             {
                 var gerente = await _context.Gerentes

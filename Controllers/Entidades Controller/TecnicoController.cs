@@ -30,6 +30,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpPost("Adicionar")]
         public async Task<IActionResult> AdicionarTecnico([FromBody] NovoTecnicoDto request)
         {
+            _logger.LogInformation("Iniciando o processo de adição de um novo técnico.");
             try
             {
                 var existingTecnico = await _context.Tecnicos.FirstOrDefaultAsync(t => t.Email == request.Email);
@@ -128,6 +129,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpGet("ObterChamadosPendentes")]
         public async Task<IActionResult> ObterChamadosPendentes()
         {
+            _logger.LogInformation("Iniciando o processo de obtenção dos chamados pendentes.");
             try
             {
                 var chamadosPendentes = await _context.Chamados
@@ -146,6 +148,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] NovoTecnicoDto request)
         {
+            _logger.LogInformation("Iniciando o processo de edição do técnico.");
             try
             { 
                 var tecnico = await _context.Tecnicos.FindAsync(id);
@@ -191,6 +194,7 @@ namespace API_MVC_Suptech.Controllers
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> DeletarTecnico(Guid id)
         {
+            _logger.LogInformation("Iniciando o processo de deleção do técnico.");
             try
             {
                 var tecnico = await _context.Tecnicos.FindAsync(id);
