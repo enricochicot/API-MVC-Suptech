@@ -125,6 +125,24 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
+        [HttpGet("ObterChamadosPendentes")]
+        public async Task<IActionResult> ObterChamadosPendentes()
+        {
+            try
+            {
+                var chamadosPendentes = await _context.Chamados
+                    .Where(c => c.Status == "Pendente")
+                    .ToListAsync();
+                return Ok(chamadosPendentes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao obter chamados pendentes.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
+        }
+
+
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] NovoTecnicoDto request)
         {
