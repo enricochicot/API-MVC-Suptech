@@ -54,7 +54,23 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpGet("Listar")]
+        [HttpGet("ListarGerentesDesktop")]
+        public async Task<IActionResult> ListarGerentesDesktop()
+        {
+            _logger.LogInformation("Listando todos os gerentes para desktop.");
+            try
+            {
+                var gerentes = await _context.Gerentes.ToListAsync();
+                return Ok(gerentes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao listar gerentes para desktop.");
+                return StatusCode(500, "Ocorreu um erro ao listar os gerentes.");
+            }
+        }
+
+        [HttpGet("ListarGerentesWeb")]
         public async Task<IActionResult> ListarGerentes()
         {
             _logger.LogInformation("Listando todos os gerentes.");

@@ -65,7 +65,22 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [HttpGet("Listar")]
+        [HttpGet("ListarUsuariosDesktop")]
+        public async Task<IActionResult> ListarTodosUsuariosDesktop()
+        {
+            try
+            {
+                var usuarios = await _context.Usuarios.ToListAsync();
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao listar todos os usuários para desktop.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
+        }
+
+        [HttpGet("ListarUsuariosWeb")]
         public async Task<IActionResult> ListarUsuarios()
         {
             try

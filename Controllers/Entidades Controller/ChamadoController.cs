@@ -61,7 +61,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             }
         }
 
-        [HttpGet("Listar")]
+        [HttpGet("ListarChamados")]
         public async Task<IActionResult> ListarChamados()
         {
             try

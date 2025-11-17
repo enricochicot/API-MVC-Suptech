@@ -60,7 +60,23 @@ namespace API_MVC_Suptech.Controllers
                 return StatusCode(500, "Ocorreu um erro interno no servidor.");
             }
         }
-        [HttpGet("Listar")]
+
+        [HttpGet("ListarTecnicosDesktop")]
+        public async Task<IActionResult> ListarTecnicosDesktop()
+        {
+            try
+            {
+                var tecnicos = await _context.Tecnicos.ToListAsync();
+                return Ok(tecnicos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao listar técnicos.");
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
+        }
+
+        [HttpGet("ListarTecnicosWeb")]
         public async Task<IActionResult> ListarTecnicos()
         {
             try
