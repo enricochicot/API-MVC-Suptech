@@ -155,7 +155,6 @@ namespace API_MVC_Suptech.Controllers
             }
         }
 
-        [Authorize(Roles = "Gerente")]
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> DeletarGerente(Guid id)
         {
