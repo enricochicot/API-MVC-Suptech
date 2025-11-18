@@ -50,7 +50,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                     Descricao = request.Descricao,
                     Prioridade = request.Prioridade,
                     Status = request.Status,
-                    RespostaTecnico = request.RespostaTecnico
+                    Resposta = request.Resposta
                 };
                 _context.Chamados.Add(novoChamado);
                 await _context.SaveChangesAsync();
@@ -78,27 +78,33 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             }
         }
 
-
-        [HttpGet("ObterChamadoPorEmail/{email}")]
-        public async Task<IActionResult> ObterChamadoPorEmail(string email)
+        //Buscar chamados baseado no valor que for recebido 
+        [HttpGet("BuscarChamados")]
+        public async Task<IActionResult> BuscarChamados([FromQuery] string valor)
         {
             try
             {
-                var chamado = await _context.Chamados
-                    .Where(c => c.EmailDoUsuario == email)
+                var chamados = await _context.Chamados
+                    .Where(c =>
+                        c.NomeDoUsuario.Contains(valor) ||
+                        c.EmailDoUsuario.Contains(valor) ||
+                        c.SetorDoUsuario.Contains(valor) ||
+                        c.Titulo.Contains(valor) ||
+                        c.Descricao.Contains(valor) ||
+                        c.Prioridade.Contains(valor) ||
+                        c.Status.Contains(valor) ||
+                        (c.Resposta != null && c.Resposta.Contains(valor))
+                    )
                     .ToListAsync();
-                if (chamado == null || chamado.Count == 0)
-                {
-                    return NotFound("Chamado não encontrado para o email fornecido.");
-                }
-                return Ok(chamado);
+                return Ok(chamados);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao obter chamado por email: {email}.");
-                return StatusCode(500, "Ocorreu um erro ao obter o chamado.");
+                _logger.LogError(ex, "Erro ao buscar chamados.");
+                return StatusCode(500, "Ocorreu um erro ao buscar os chamados.");
             }
         }
+
 
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarChamado(Guid id, [FromBody] EditarChamadoDto request)
@@ -141,7 +147,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 chamado.Descricao = request.Descricao ?? chamado.Descricao;
                 chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
                 chamado.Status = request.Status ?? chamado.Status;
-                chamado.RespostaTecnico = request.RespostaTecnico ?? chamado.RespostaTecnico;
+                chamado.Resposta = request.Resposta ?? chamado.Resposta;
                 await _context.SaveChangesAsync();
                 return Ok("Chamado editado com sucesso!");
             }

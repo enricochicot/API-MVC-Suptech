@@ -26,7 +26,7 @@ namespace API_MVC_Suptech.Entitys.Dtos
         [Required(ErrorMessage = "Este campo deve possuir o status do chamado")]
         public required string Status { get; set; }
 
-        [Required(ErrorMessage = "Este campo deve possuir a resposta do técnico")]
-        public string? RespostaTecnico { get; set; }
+        [Required(ErrorMessage = "Este campo deve possuir a resposta do chamado.")]
+        public string? Resposta { get; set; }
     }
 }

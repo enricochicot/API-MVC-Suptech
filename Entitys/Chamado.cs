@@ -21,7 +21,7 @@ namespace API_MVC_Suptech.Entitys
         public DateTime DataAbertura { get; set; } = DateTime.Now;
 
         // Resposta do técnico pode ser nula inicialmente
-        public string? RespostaTecnico { get; set; }    
+        public string? Resposta { get; set; }    
 
     }
 }
