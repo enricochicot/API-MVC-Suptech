@@ -23,7 +23,5 @@ namespace API_MVC_Suptech.Entitys
         // Resposta do técnico pode ser nula inicialmente
         public string? Resposta { get; set; }
 
-        // Relacionamento com a entidade Técnico (opcional)
-
     }
 }
