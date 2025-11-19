@@ -21,7 +21,9 @@ namespace API_MVC_Suptech.Entitys
         public DateTime DataAbertura { get; set; } = DateTime.Now;
 
         // Resposta do técnico pode ser nula inicialmente
-        public string? Resposta { get; set; }    
+        public string? Resposta { get; set; }
+
+        // Relacionamento com a entidade Técnico (opcional)
 
     }
 }
