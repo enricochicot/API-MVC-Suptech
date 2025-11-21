@@ -78,7 +78,6 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             }
         }
 
-        //Buscar chamados baseado no valor que for recebido 
         [HttpGet("BuscarChamadosPorEmail/{email}")]
         public async Task<IActionResult> BuscarChamadosPorEmail(string email)
         {
