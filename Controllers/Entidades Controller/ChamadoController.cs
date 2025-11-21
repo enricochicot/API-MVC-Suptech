@@ -97,8 +97,8 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         }
 
 
-        [HttpGet("BuscarChamadoPorStatus")]
-        public async Task<IActionResult> BuscarChamadoPorStatus([FromQuery] string status)
+        [HttpGet("BuscarChamadosPorStatus")]
+        public async Task<IActionResult> BuscarChamadosPorStatus([FromQuery] string status)
         {
             try
             {
