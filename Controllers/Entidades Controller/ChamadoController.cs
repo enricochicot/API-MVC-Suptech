@@ -86,10 +86,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 var chamados = await _context.Chamados
                     .Where(c => c.EmailDoUsuario == email)
                     .ToListAsync();
-                if (chamados.Count == 0)
-                {
-                    return NotFound("Nenhum chamado encontrado para o email fornecido.");
-                }
+
                 return Ok(chamados);
             }
             catch (Exception ex)
@@ -108,10 +105,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 var chamados = await _context.Chamados
                     .Where(c => c.Status == status)
                     .ToListAsync();
-                if (chamados.Count == 0)
-                {
-                    return NotFound("Nenhum chamado encontrado para o status fornecido.");
-                }
+
                 return Ok(chamados);
             }
             catch (Exception ex)
