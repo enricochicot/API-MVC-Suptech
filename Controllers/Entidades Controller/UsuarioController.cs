@@ -119,10 +119,9 @@ namespace API_MVC_Suptech.Controllers
                         u.Telefone
                     })
                     .FirstOrDefaultAsync();
-                if (usuario == null)
-                {
-                    return NotFound("Usuário não encontrado.");
-                }
+
+                //metodo para lidar com (usuario = null), implementado no frontend
+
                 return Ok(usuario);
             }
             catch (Exception ex)

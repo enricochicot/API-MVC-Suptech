@@ -113,10 +113,9 @@ namespace API_MVC_Suptech.Controllers
                         t.Telefone
                     })
                     .FirstOrDefaultAsync();
-                if (tecnico == null)
-                {
-                    return NotFound("Técnico não encontrado.");
-                }
+
+                //metodo para lidar com (tecnico = null), implementado no frontend
+
                 return Ok(tecnico);
             }
             catch (Exception ex)
