@@ -79,32 +79,48 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         }
 
         //Buscar chamados baseado no valor que for recebido 
-        [HttpGet("BuscarChamados")]
-        public async Task<IActionResult> BuscarChamados([FromQuery] string valor)
+        [HttpGet("BuscarChamadosPorEmail/{email}")]
+        public async Task<IActionResult> BuscarChamadosPorEmail(string email)
         {
             try
             {
                 var chamados = await _context.Chamados
-                    .Where(c =>
-                        c.NomeDoUsuario.Contains(valor) ||
-                        c.EmailDoUsuario.Contains(valor) ||
-                        c.SetorDoUsuario.Contains(valor) ||
-                        c.Titulo.Contains(valor) ||
-                        c.Descricao.Contains(valor) ||
-                        c.Prioridade.Contains(valor) ||
-                        c.Status.Contains(valor) ||
-                        (c.Resposta != null && c.Resposta.Contains(valor))
-                    )
+                    .Where(c => c.EmailDoUsuario == email)
                     .ToListAsync();
+                if (chamados.Count == 0)
+                {
+                    return NotFound("Nenhum chamado encontrado para o email fornecido.");
+                }
                 return Ok(chamados);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao buscar chamados.");
+                _logger.LogError(ex, "Erro ao buscar chamados por email.");
                 return StatusCode(500, "Ocorreu um erro ao buscar os chamados.");
             }
         }
 
+
+        [HttpGet("BuscarChamadoPorStatus")]
+        public async Task<IActionResult> BuscarChamadoPorStatus([FromQuery] string status)
+        {
+            try
+            {
+                var chamados = await _context.Chamados
+                    .Where(c => c.Status == status)
+                    .ToListAsync();
+                if (chamados.Count == 0)
+                {
+                    return NotFound("Nenhum chamado encontrado para o status fornecido.");
+                }
+                return Ok(chamados);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao buscar chamados por status.");
+                return StatusCode(500, "Ocorreu um erro ao buscar os chamados.");
+            }
+        }
 
         [HttpPut("Editar/{id}")]
         public async Task<IActionResult> EditarChamado(Guid id, [FromBody] EditarChamadoDto request)
