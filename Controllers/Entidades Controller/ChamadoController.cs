@@ -78,7 +78,6 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
             }
         }
 
-        //Buscar chamados baseado no valor que for recebido 
         [HttpGet("BuscarChamadosPorEmail/{email}")]
         public async Task<IActionResult> BuscarChamadosPorEmail(string email)
         {
@@ -87,10 +86,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 var chamados = await _context.Chamados
                     .Where(c => c.EmailDoUsuario == email)
                     .ToListAsync();
-                if (chamados.Count == 0)
-                {
-                    return NotFound("Nenhum chamado encontrado para o email fornecido.");
-                }
+
                 return Ok(chamados);
             }
             catch (Exception ex)
@@ -101,18 +97,15 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
         }
 
 
-        [HttpGet("BuscarChamadoPorStatus")]
-        public async Task<IActionResult> BuscarChamadoPorStatus([FromQuery] string status)
+        [HttpGet("BuscarChamadosPorStatus/{status}")]
+        public async Task<IActionResult> BuscarChamadosPorStatus(string status)
         {
             try
             {
                 var chamados = await _context.Chamados
                     .Where(c => c.Status == status)
                     .ToListAsync();
-                if (chamados.Count == 0)
-                {
-                    return NotFound("Nenhum chamado encontrado para o status fornecido.");
-                }
+
                 return Ok(chamados);
             }
             catch (Exception ex)
