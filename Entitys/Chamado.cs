@@ -22,6 +22,7 @@ namespace API_MVC_Suptech.Entitys
 
         // Resposta do técnico pode ser nula inicialmente
         public string? Resposta { get; set; }
+        public string? TecnicoResponsavel { get; set; } 
 
     }
 }
