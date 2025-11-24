@@ -50,7 +50,8 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                     Descricao = request.Descricao,
                     Prioridade = request.Prioridade,
                     Status = request.Status,
-                    Resposta = request.Resposta
+                    Resposta = request.Resposta,
+                    TecnicoResponsavel = request.TecnicoResponsavel,
                 };
                 _context.Chamados.Add(novoChamado);
                 await _context.SaveChangesAsync();
@@ -157,6 +158,7 @@ namespace API_MVC_Suptech.Controllers.Entidades_Controller
                 chamado.Prioridade = request.Prioridade ?? chamado.Prioridade;
                 chamado.Status = request.Status ?? chamado.Status;
                 chamado.Resposta = request.Resposta ?? chamado.Resposta;
+                chamado.TecnicoResponsavel = request.TecnicoResponsavel ?? chamado.TecnicoResponsavel;
                 await _context.SaveChangesAsync();
                 return Ok("Chamado editado com sucesso!");
             }
