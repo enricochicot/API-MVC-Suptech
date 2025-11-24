@@ -1,4 +1,3 @@
-
 using API_MVC_Suptech.Data;
 using API_MVC_Suptech.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,14 +15,14 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.ListenAnyIP(5000); // HTTP
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<CrudData>(options =>
     options.UseSqlServer(connectionString)
 );
 
-// Configura��o de Autentica��o JWT
+// Configuração de Autenticação JWT
 var jwtKey = builder.Configuration["Jwt:Key"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -40,44 +39,43 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
 
-    // Configura��o de eventos para logging
-    options.Events = new JwtBearerEvents
-    {
-        OnAuthenticationFailed = context =>
+        // Configuração de eventos para logging
+        options.Events = new JwtBearerEvents
         {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning("Falha na autentica��o: {Error} | Endpoint: {Path}",
-                context.Exception.Message,
-                context.HttpContext.Request.Path);
-            return Task.CompletedTask;
-        },
-        OnChallenge = context =>
-        {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning("Acesso n�o autorizado (sem token ou token inv�lido) | Endpoint: {Path} | IP: {IP}",
-                context.Request.Path,
-                context.HttpContext.Connection.RemoteIpAddress);
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            var userName = context.Principal?.Identity?.Name ?? "Desconhecido";
-            logger.LogInformation("Token validado com sucesso | Usu�rio: {User} | Endpoint: {Path}",
-                userName,
-                context.HttpContext.Request.Path);
-            return Task.CompletedTask;
-        },
-        OnForbidden = context =>
-        {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning("Acesso negado (sem permiss�o) | Endpoint: {Path} | IP: {IP}",
-                context.Request.Path,
-                context.HttpContext.Connection.RemoteIpAddress);
-            return Task.CompletedTask;
-        }
-    };
-
+            OnAuthenticationFailed = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("Falha na autenticação: {Error} | Endpoint: {Path}",
+                    context.Exception.Message,
+                    context.HttpContext.Request.Path);
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("Acesso não autorizado (sem token ou token inválido) | Endpoint: {Path} | IP: {IP}",
+                    context.Request.Path,
+                    context.HttpContext.Connection.RemoteIpAddress);
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var userName = context.Principal?.Identity?.Name ?? "Desconhecido";
+                logger.LogInformation("Token validado com sucesso | Usuário: {User} | Endpoint: {Path}",
+                    userName,
+                    context.HttpContext.Request.Path);
+                return Task.CompletedTask;
+            },
+            OnForbidden = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("Acesso negado (sem permissão) | Endpoint: {Path} | IP: {IP}",
+                    context.Request.Path,
+                    context.HttpContext.Connection.RemoteIpAddress);
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
@@ -85,47 +83,44 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        c.SwaggerDoc("v1", new OpenApiInfo
-        {
-            Title = "API MVC Suptech",
-            Version = "v1"
-        });
+        Title = "API MVC Suptech",
+        Version = "v1"
+    });
 
-        // Adiciona suporte a Bearer Token no Swagger
-        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        {
-            Description = "JWT Authorization header. Exemplo: \"Bearer {token}\"",
-            Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.Http,
-            Scheme = "bearer"
-        });
+    // Adiciona suporte a Bearer Token no Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header. Exemplo: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
 
-        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
+            new OpenApiSecurityScheme
             {
-                new OpenApiSecurityScheme
+                Reference = new OpenApiReference
                 {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
-    }
-);
-
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddCors(options =>
-    {
-        options.AddPolicy(name: "policy", policy => { policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod(); });
-    }
-);
+{
+    options.AddPolicy(name: "policy", policy => { policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod(); });
+});
 
 var app = builder.Build();
 
@@ -143,7 +138,7 @@ app.UseSwaggerUI(c =>
 
 app.UseCors("policy");
 
-app.UseAuthentication(); // Adiciona autentica��o
+app.UseAuthentication(); // Adiciona autenticação
 app.UseAuthorization();
 
 app.MapControllers();
@@ -151,11 +146,11 @@ app.MapControllers();
 app.Run();
 
 
-// Usa valida��o nativa do ASP.NET Core
+// Usa validação nativa do ASP.NET Core
 // Funciona com Swagger automaticamente
 
 // 4 eventos principais para logging:
-// OnAuthenticationFailed: Quando a autentica��o falha (token inv�lido, expirado, etc)
-// OnChallenge: Quando uma requisi��o n�o autenticada tenta acessar um endpoint protegido
-// OnTokenValidated: Quando o token � validado com sucesso
-// OnForbidden: Quando um usu�rio autenticado tenta acessar um recurso sem permiss�o
+// OnAuthenticationFailed: Quando a autenticação falha (token inválido, expirado, etc)
+// OnChallenge: Quando uma requisição não autenticada tenta acessar um endpoint protegido
+// OnTokenValidated: Quando o token é validado com sucesso
+// OnForbidden: Quando um usuário autenticado tenta acessar um recurso sem permissão
