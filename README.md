@@ -1,471 +1,125 @@
-# API MVC Suptech
+# API-MVC-Suptech: Backend Central do Sistema TechSupport (PIM-4 e SuptechDESKTOP)
 
-API RESTful desenvolvida em .NET 9 para gerenciamento de chamados de suporte técnico, com sistema completo de autenticação e controle de usuários.
+<!-- BADGES SECTION -->
+[![Status do Projeto](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)](https://github.com/enricochicot/API-MVC-Suptech)
+[![Licença](https://img.shields.io/github/license/enricochicot/API-MVC-Suptech)](LICENSE)
+[![Tecnologia Principal](https://img.shields.io/badge/Backend-ASP.NET%20Core%20(.NET%209)-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+[![Frontend Mobile/Web](https://img.shields.io/badge/Frontend%20(Usu%C3%A1rios%2FT%C3%A9cnicos)-PIM--4%20(React%20Native)-61DAFB?logo=react&logoColor=white)](https://github.com/heitorrsdev/PIM-4)
+[![Frontend Desktop](https://img.shields.io/badge/Frontend%20(Gerentes)-SuptechDESKTOP%20(JavaFX)-007396?logo=java&logoColor=white)](https://github.com/LeonardoZanchi/SuptechDESKTOP)
 
-## 📋 Sobre o Projeto
+## 🎓 Contexto do Projeto (Trabalho de Conclusão de Curso - TCC)
 
-A **API MVC Suptech** é um sistema de gerenciamento de help desk que permite o controle de chamados técnicos, usuários, técnicos e gerentes. A aplicação oferece endpoints para criação, listagem, edição e exclusão de entidades, além de sistema de autenticação com JWT.
+Este repositório contém o código-fonte do **Backend Central** do projeto **TechSupport App**, desenvolvido como parte do Trabalho de Conclusão de Curso (TCC). A **API-MVC-Suptech** é a camada de dados e lógica de negócios, responsável por gerenciar a autenticação, os dados de usuários e o ciclo de vida dos chamados técnicos para todas as interfaces do sistema.
 
-### Principais Funcionalidades
+### Interfaces do Sistema
 
-- ✅ Gerenciamento completo de **Usuários**
-- ✅ Gerenciamento completo de **Técnicos**
-- ✅ Gerenciamento completo de **Gerentes**
-- ✅ Sistema de **Chamados** com prioridades e status
-- ✅ Autenticação com **JWT (JSON Web Token)**
-- ✅ Criptografia de senhas com **BCrypt**
-- ✅ Validação de dados com **Data Annotations**
-- ✅ Documentação automática com **Swagger**
-- ✅ Integração com **SQL Server**
+Esta API serve como backend para duas aplicações frontend distintas, cada uma focada em um público-alvo específico:
 
-## 🚀 Tecnologias Utilizadas
+| Aplicação Frontend | Tecnologia | Público-Alvo | Repositório |
+| :--- | :--- | :--- | :--- |
+| **PIM-4** | React Native Web + Expo | Usuários e Técnicos | [heitorrsdev/PIM-4](https://github.com/heitorrsdev/PIM-4) |
+| **SuptechDESKTOP** | JavaFX 21 | Gerentes | [LeonardoZanchi/SuptechDESKTOP](https://github.com/LeonardoZanchi/SuptechDESKTOP) |
 
-- **.NET 9.0**
-- **ASP.NET Core Web API**
-- **Entity Framework Core 9.0.10**
-- **SQL Server**
-- **BCrypt.Net-Next 4.0.3** - Criptografia de senhas
-- **JWT (System.IdentityModel.Tokens.Jwt 8.14.0)** - Autenticação
-- **Swagger/OpenAPI** - Documentação da API
-- **C# 13.0**
+## ✨ Funcionalidades da API
 
-## 📦 Pacotes NuGet
+A API foi projetada para suportar todas as operações de gerenciamento de usuários e chamados do **TechSupport App**, incluindo:
 
-```xml
-<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
-<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
-<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
-```
+*   **Autenticação e Autorização:** Login seguro via **JWT (JSON Web Tokens)**.
+*   **Gerenciamento de Usuários (CRUD):** Cadastro, listagem, edição e exclusão de:
+    *   Administradores
+    *   Gerentes
+    *   Técnicos
+    *   Usuários
+*   **Gerenciamento de Chamados (CRUD):** Criação, consulta, edição e exclusão de chamados técnicos, com controle de prioridades e status.
+*   **Tratamento de Exceções:** Logs e tratamento de erros robustos.
 
-## 🏗️ Estrutura do Projeto
+## 💻 Tecnologias Utilizadas
+
+| Categoria | Tecnologia | Versão | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Framework** | ASP.NET Core Web API | .NET 9.0 | Framework para construção da API RESTful. |
+| **Linguagem** | C# | 13.0 | Linguagem de programação principal. |
+| **ORM** | Entity Framework Core | 9.0.10 | Mapeamento Objeto-Relacional para acesso a dados. |
+| **Banco de Dados** | SQL Server | - | Sistema de gerenciamento de banco de dados. |
+| **Segurança** | JWT | 8.14.0 | Implementação de tokens para autenticação. |
+| **Criptografia** | BCrypt.Net-Next | 4.0.3 | Utilizado para o hash seguro de senhas. |
+| **Documentação** | Swagger/OpenAPI | - | Interface interativa para documentação e teste dos endpoints. |
+
+## 📁 Estrutura do Projeto
+
+O projeto segue o padrão **Model-View-Controller (MVC)** adaptado para uma API, com uma arquitetura limpa e modular:
 
 ```
 API-MVC-Suptech/
-│
-├── Controllers/
-│   ├── Autenticação/
-│   │   ├── AuthController.cs      # Autenticação e login
-│   │ └── AuthDesktop.cs
-│   │
-│   └── Entidades Controller/
-│   ├── UsuarioController.cs   # CRUD de Usuários
-│       ├── TecnicoController.cs   # CRUD de Técnicos
-│       ├── GerenteController.cs   # CRUD de Gerentes
-│    └── ChamadoController.cs   # CRUD de Chamados
-│
-├── Entitys/
-│   ├── Usuario.cs           # Entidade Usuario
-│   ├── Tecnico.cs               # Entidade Tecnico
-│   ├── Gerente.cs       # Entidade Gerente
-│   ├── Chamado.cs     # Entidade Chamado
-│   │
-│   └── Dtos/
-│   ├── NovoUsuarioDto.cs
-│       ├── NovoTecnicoDto.cs
-│       ├── NovoGerenteDto.cs
-│       ├── NovoChamadoDto.cs
-│       ├── EditarDto.cs
-│       ├── EditarChamadoDto.cs
-│  ├── LoginDto.cs
-│       └── ExcluirDto.cs
-│
-├── Data/
-│   └── CrudData.cs      # DbContext do EF Core
-│
-├── Services/
-│   └── TokenService.cs       # Geração de tokens JWT
-│
-├── Program.cs              # Configuração da aplicação
-└── appsettings.json      # Configurações
+├── Controllers/      # Lógica das rotas e endpoints (Auth, Entidades)
+├── Entitys/          # Modelos de domínio (Usuário, Chamado, etc.)
+│   └── Dtos/         # Objetos de Transferência de Dados (DTOs)
+├── Data/             # Contexto do Entity Framework (CrudData.cs)
+├── Services/         # Serviços auxiliares (Ex: TokenService.cs)
+├── Program.cs        # Configuração e inicialização da aplicação
+└── appsettings.json  # Configurações
 ```
 
-## ⚙️ Configuração e Instalação
+## 🔑 Endpoints Principais da API
+
+A API expõe endpoints para autenticação e operações CRUD nas entidades principais.
+
+| Funcionalidade | Método | Endpoint | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Login** | `POST` | `/api/Auth/Login` | Autentica o usuário e retorna um JWT. |
+| **Usuários** | `POST` | `/api/Usuario/Adicionar` | Cria um novo usuário. |
+| | `GET` | `/api/Usuario/Listar` | Lista todos os usuários. |
+| **Chamados** | `POST` | `/api/Chamado/Adicionar` | Abre um novo chamado. |
+| | `GET` | `/api/Chamado/Listar` | Lista todos os chamados. |
+| | `PUT` | `/api/Chamado/Editar/{id}` | Edita um chamado existente. |
+| **Gerentes** | `POST` | `/api/Gerente/Adicionar` | Cria um novo gerente. |
+| | `GET` | `/api/Gerente/Listar` | Lista todos os gerentes. |
+| **Técnicos** | `POST` | `/api/Tecnico/Adicionar` | Cria um novo técnico. |
+| | `GET` | `/api/Tecnico/Listar` | Lista todos os técnicos. |
+
+*   **Nota:** Todos os endpoints de listagem, obtenção por ID, edição e exclusão estão disponíveis para as entidades **Usuário**, **Técnico**, **Gerente** e **Chamado**.
+
+## 🛠️ Instalação e Execução Local
+
+Para rodar a API em seu ambiente de desenvolvimento, siga os passos abaixo:
 
 ### Pré-requisitos
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [SQL Server](https://www.microsoft.com/sql-server/sql-server-downloads)
-- IDE (Visual Studio 2022, VS Code ou Rider)
-
-### Passos para Instalação
-
-1. **Clone o repositório**
-```bash
-git clone https://github.com/enricochicot/API-MVC-Suptech.git
-cd API-MVC-Suptech
-```
-
-2. **Configure a Connection String**
-
-Edite o arquivo `appsettings.json` e configure sua connection string:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=SEU_SERVIDOR;Database=SuptechDB;Trusted_Connection=True;TrustServerCertificate=True;"
-  },
-  "Jwt": {
-    "Key": "SUA_CHAVE_SECRETA_AQUI_MIN_32_CARACTERES",
-    "Issuer": "SuptechAPI",
-    "Audience": "SuptechClients",
-    "ExpireHours": 24
-  }
-}
-```
-
-3. **Restaure os pacotes**
-```bash
-dotnet restore
-```
-
-4. **Execute as Migrations**
-```bash
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-```
-
-5. **Execute a aplicação**
-```bash
-dotnet run
-```
-
-6. **Acesse a documentação Swagger**
-```
-https://localhost:5001/swagger
-```
-
-## 📚 Endpoints da API
-
-### 🔐 Autenticação
-
-#### Login
-```http
-POST /api/Auth/Login
-Content-Type: application/json
-
-{
-  "email": "usuario@exemplo.com",
-  "senha": "senha123"
-}
-```
-
-**Resposta:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
----
-
-### 👥 Usuários
-
-#### Adicionar Usuário
-```http
-POST /api/Usuario/Adicionar
-Content-Type: application/json
-
-{
-  "nome": "João Silva",
-  "email": "joao@exemplo.com",
-  "senha": "senha123",
-  "setor": "TI",
-  "telefone": "(11) 98765-4321"
-}
-```
-
-#### Listar Usuários
-```http
-GET /api/Usuario/Listar
-```
-
-#### Obter Usuário por ID
-```http
-GET /api/Usuario/Obter/{id}
-```
-
-#### Editar Usuário
-```http
-PUT /api/Usuario/Editar/{id}
-Content-Type: application/json
-
-{
-  "nome": "João Silva Atualizado",
-  "email": "joao.novo@exemplo.com",
-  "senha": "novaSenha123",
-  "setor": "Desenvolvimento",
-  "telefone": "(11) 98765-4321"
-}
-```
-
-#### Deletar Usuário
-```http
-DELETE /api/Usuario/Excluir/{id}
-```
-
----
-
-### 🔧 Técnicos
-
-#### Adicionar Técnico
-```http
-POST /api/Tecnico/Adicionar
-Content-Type: application/json
-
-{
-  "nome": "Maria Santos",
-  "email": "maria@exemplo.com",
-  "senha": "senha123",
-  "especialidade": "Redes",
-  "telefone": "(11) 91234-5678"
-}
-```
-
-#### Listar Técnicos
-```http
-GET /api/Tecnico/Listar
-```
-
-#### Obter Técnico por ID
-```http
-GET /api/Tecnico/Obter/{id}
-```
-
-#### Editar Técnico
-```http
-PUT /api/Tecnico/Editar/{id}
-```
-
-#### Deletar Técnico
-```http
-DELETE /api/Tecnico/Excluir/{id}
-```
-
----
-
-### 👨‍💼 Gerentes
-
-#### Adicionar Gerente
-```http
-POST /api/Gerente/Adicionar
-Content-Type: application/json
-
-{
-  "nome": "Carlos Oliveira",
-  "email": "carlos@exemplo.com",
-  "senha": "senha123",
-  "setor": "Suporte Técnico",
-  "telefone": "(11) 99999-8888"
-}
-```
-
-#### Listar Gerentes
-```http
-GET /api/Gerente/Listar
-```
-
-#### Obter Gerente por ID
-```http
-GET /api/Gerente/Obter/{id}
-```
-
-#### Editar Gerente
-```http
-PUT /api/Gerente/Editar/{id}
-```
-
-#### Deletar Gerente
-```http
-DELETE /api/Gerente/Excluir/{id}
-```
-
----
-
-### 🎫 Chamados
-
-#### Adicionar Chamado
-```http
-POST /api/Chamado/Adicionar
-Content-Type: application/json
-
-{
-  "nomeDoUsuario": "João Silva",
-  "emailDoUsuario": "joao@exemplo.com",
-  "setorDoUsuario": "TI",
-  "titulo": "Problema no computador",
-  "descricao": "O computador não liga",
-  "prioridade": "Alta",
-  "status": "Aberto"
-}
-```
-
-**Valores aceitos:**
-- **Prioridade**: `Baixa`, `Média`, `Alta`
-- **Status**: `Aberto`, `Pendente`, `Fechado`
-
-#### Listar Chamados
-```http
-GET /api/Chamado/Listar
-```
-
-#### Obter Chamado por ID
-```http
-GET /api/Chamado/Obter/{id}
-```
-
-#### Editar Chamado
-```http
-PUT /api/Chamado/Editar/{id}
-```
-
-#### Deletar Chamado
-```http
-DELETE /api/Chamado/Excluir/{id}
-```
-
-## 🗄️ Modelo de Dados
-
-### Usuario
-- `UsuarioID` (Guid, PK)
-- `Nome` (string, obrigatório)
-- `Email` (string, obrigatório, único, validado)
-- `Senha` (string, obrigatório, min 6 caracteres, criptografada)
-- `Setor` (string, obrigatório)
-- `Telefone` (string, obrigatório)
-
-### Tecnico
-- `TecnicoID` (Guid, PK)
-- `Nome` (string, obrigatório)
-- `Email` (string, obrigatório, único, validado)
-- `Senha` (string, obrigatório, min 6 caracteres, criptografada)
-- `Especialidade` (string, obrigatório)
-- `Telefone` (string, obrigatório)
-
-### Gerente
-- `GerenteID` (Guid, PK)
-- `Nome` (string, obrigatório)
-- `Email` (string, obrigatório, único, validado)
-- `Senha` (string, obrigatório, min 6 caracteres, criptografada)
-- `Setor` (string, obrigatório)
-- `Telefone` (string, obrigatório)
-
-### Chamado
-- `ChamadoID` (Guid, PK)
-- `NomeDoUsuario` (string, obrigatório)
-- `EmailDoUsuario` (string, obrigatório, validado)
-- `SetorDoUsuario` (string, obrigatório)
-- `Titulo` (string, obrigatório)
-- `Descricao` (string, obrigatório)
-- `Prioridade` (string, obrigatório: Baixa/Média/Alta)
-- `Status` (string, obrigatório: Aberto/Pendente/Fechado)
-- `DataAbertura` (DateTime, gerado automaticamente)
-
-## 🔒 Segurança
-
-- **Criptografia de Senhas**: Todas as senhas são criptografadas usando BCrypt antes de serem armazenadas no banco de dados
-- **JWT Authentication**: Sistema de autenticação baseado em tokens JWT com expiração configurável
-- **Validação de Dados**: Validação robusta usando Data Annotations em todos os DTOs
-- **CORS**: Configurado para aceitar requisições de diferentes origens (ajuste conforme necessário em produção)
-
-## 🛠️ Tratamento de Erros
-
-A API implementa tratamento de erros consistente:
-
-- **200 OK**: Operação realizada com sucesso
-- **400 Bad Request**: Dados inválidos ou violação de regras de negócio
-- **401 Unauthorized**: Credenciais inválidas
-- **404 Not Found**: Recurso não encontrado
-- **500 Internal Server Error**: Erro interno do servidor (com logs detalhados)
-
-Exemplo de resposta de erro:
-```json
-{
-  "message": "Email já está em uso."
-}
-```
-
-## 📝 Logs
-
-A aplicação utiliza o sistema de logging do ASP.NET Core com ILogger:
-
-- Logs de erro são registrados com detalhes completos
-- Em desenvolvimento, erros retornam stack traces completos
-- Em produção, apenas mensagens genéricas são retornadas
-
-## 🧪 Testando a API
-
-### Com Swagger
-1. Execute a aplicação
-2. Acesse `https://localhost:5001/swagger`
-3. Teste os endpoints diretamente pela interface
-
-### Com cURL
-
-**Criar um usuário:**
-```bash
-curl -X POST "https://localhost:5001/api/Usuario/Adicionar" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "nome": "João Silva",
-    "email": "joao@exemplo.com",
-    "senha": "senha123",
-    "setor": "TI",
-    "telefone": "(11) 98765-4321"
-  }'
-```
-
-**Fazer login:**
-```bash
-curl -X POST "https://localhost:5001/api/Auth/Login" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "joao@exemplo.com",
-    "senha": "senha123"
-  }'
-```
-
-## 🌐 CORS
-
-A API está configurada para aceitar requisições de qualquer origem. Para ambientes de produção, recomenda-se configurar origens específicas em `Program.cs`:
-
-```csharp
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("policy", policy => 
-    { 
-        policy.WithOrigins("https://seudominio.com")
-              .AllowAnyHeader()
-              .AllowAnyMethod(); 
-    });
-});
-```
+*   [**SDK do .NET 9.0**](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (ou superior).
+*   Um servidor de banco de dados **SQL Server** (local ou remoto).
+
+### Configuração
+
+1.  **Clone o repositório:**
+    ```shell
+    git clone https://github.com/enricochicot/API-MVC-Suptech.git
+    cd API-MVC-Suptech
+    ```
+2.  **Configure a Connection String e JWT:**
+    *   Edite o arquivo `appsettings.json` e configure a string de conexão do SQL Server e a chave secreta do JWT.
+3.  **Restaure os pacotes e dependências:**
+    ```shell
+    dotnet restore
+    ```
+4.  **Execute as Migrations:**
+    *   Crie o banco de dados e as tabelas usando as migrações do Entity Framework Core:
+    ```shell
+    dotnet ef database update
+    ```
+
+### Execução
+
+1.  **Inicie a aplicação:**
+    ```shell
+    dotnet run
+    ```
+2.  **Acesse a documentação Swagger:**
+    *   A API será iniciada e o **Swagger** estará disponível em `https://localhost:{porta}/swagger` (a porta será exibida no console). Use o Swagger para testar os endpoints e visualizar os modelos de dados.
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Por favor, abra uma *Issue* para discutir a funcionalidade que você gostaria de adicionar ou o bug que deseja corrigir, e então submeta um *Pull Request*.
 
 ## 📄 Licença
 
-Este projeto é de código aberto e está disponível sob a licença MIT.
-
-## 👨‍💻 Autor
-
-**Enrico Chicot**
-- GitHub: [@enricochicot](https://github.com/enricochicot)
-- Repositório: [API-MVC-Suptech](https://github.com/enricochicot/API-MVC-Suptech)
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Sinta-se à vontade para:
-
-1. Fazer um Fork do projeto
-2. Criar uma branch para sua feature (`git checkout -b feature/NovaFuncionalidade`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
-4. Push para a branch (`git push origin feature/NovaFuncionalidade`)
-5. Abrir um Pull Request
-
-## 📞 Suporte
-
-Para questões e suporte, abra uma [issue](https://github.com/enricochicot/API-MVC-Suptech/issues) no GitHub.
-
----
-
-⭐ Se este projeto foi útil para você, considere dar uma estrela no repositório!
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
