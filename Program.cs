@@ -10,6 +10,12 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configura o servidor para escutar em 0.0.0.0 apenas HTTP
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); // HTTP
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
@@ -17,7 +23,7 @@ builder.Services.AddDbContext<CrudData>(options =>
     options.UseSqlServer(connectionString)
 );
 
-// Configuração de Autenticação JWT
+// Configuraï¿½ï¿½o de Autenticaï¿½ï¿½o JWT
 var jwtKey = builder.Configuration["Jwt:Key"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -34,13 +40,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
 
-    // Configuração de eventos para logging
+    // Configuraï¿½ï¿½o de eventos para logging
     options.Events = new JwtBearerEvents
     {
         OnAuthenticationFailed = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning("Falha na autenticação: {Error} | Endpoint: {Path}",
+            logger.LogWarning("Falha na autenticaï¿½ï¿½o: {Error} | Endpoint: {Path}",
                 context.Exception.Message,
                 context.HttpContext.Request.Path);
             return Task.CompletedTask;
@@ -48,7 +54,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         OnChallenge = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning("Acesso não autorizado (sem token ou token inválido) | Endpoint: {Path} | IP: {IP}",
+            logger.LogWarning("Acesso nï¿½o autorizado (sem token ou token invï¿½lido) | Endpoint: {Path} | IP: {IP}",
                 context.Request.Path,
                 context.HttpContext.Connection.RemoteIpAddress);
             return Task.CompletedTask;
@@ -57,7 +63,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
             var userName = context.Principal?.Identity?.Name ?? "Desconhecido";
-            logger.LogInformation("Token validado com sucesso | Usuário: {User} | Endpoint: {Path}",
+            logger.LogInformation("Token validado com sucesso | Usuï¿½rio: {User} | Endpoint: {Path}",
                 userName,
                 context.HttpContext.Request.Path);
             return Task.CompletedTask;
@@ -65,7 +71,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         OnForbidden = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogWarning("Acesso negado (sem permissão) | Endpoint: {Path} | IP: {IP}",
+            logger.LogWarning("Acesso negado (sem permissï¿½o) | Endpoint: {Path} | IP: {IP}",
                 context.Request.Path,
                 context.HttpContext.Connection.RemoteIpAddress);
             return Task.CompletedTask;
@@ -137,7 +143,7 @@ app.UseSwaggerUI(c =>
 
 app.UseCors("policy");
 
-app.UseAuthentication(); // Adiciona autenticação
+app.UseAuthentication(); // Adiciona autenticaï¿½ï¿½o
 app.UseAuthorization();
 
 app.MapControllers();
@@ -145,11 +151,11 @@ app.MapControllers();
 app.Run();
 
 
-// Usa validação nativa do ASP.NET Core
+// Usa validaï¿½ï¿½o nativa do ASP.NET Core
 // Funciona com Swagger automaticamente
 
 // 4 eventos principais para logging:
-// OnAuthenticationFailed: Quando a autenticação falha (token inválido, expirado, etc)
-// OnChallenge: Quando uma requisição não autenticada tenta acessar um endpoint protegido
-// OnTokenValidated: Quando o token é validado com sucesso
-// OnForbidden: Quando um usuário autenticado tenta acessar um recurso sem permissão
+// OnAuthenticationFailed: Quando a autenticaï¿½ï¿½o falha (token invï¿½lido, expirado, etc)
+// OnChallenge: Quando uma requisiï¿½ï¿½o nï¿½o autenticada tenta acessar um endpoint protegido
+// OnTokenValidated: Quando o token ï¿½ validado com sucesso
+// OnForbidden: Quando um usuï¿½rio autenticado tenta acessar um recurso sem permissï¿½o
