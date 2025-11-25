@@ -132,7 +132,7 @@ namespace API_MVC_Suptech.Controllers
         }
 
         [HttpPut("Editar/{id}")]
-        public async Task<IActionResult> EditarUsuario(Guid id, [FromBody] EditarDto request)
+        public async Task<IActionResult> EditarUsuario(Guid id, [FromBody] EditarUsuarioDto request)
         {
             _logger.LogInformation("Iniciando o processo de edição do usuário.");
             try

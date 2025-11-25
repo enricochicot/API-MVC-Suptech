@@ -126,43 +126,26 @@ namespace API_MVC_Suptech.Controllers
         }
 
         [HttpPut("Editar/{id}")]
-        public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] NovoTecnicoDto request)
+        public async Task<IActionResult> EditarTecnico(Guid id, [FromBody] EditarTecnicoDto request)
         {
             _logger.LogInformation("Iniciando o processo de edição do técnico.");
             try
-            { 
+            {
                 var tecnico = await _context.Tecnicos.FindAsync(id);
                 if (tecnico == null)
                 {
                     return NotFound("Técnico não encontrado.");
                 }
-
-                if(tecnico.Email != request.Email)
-                {
-                    var emailExists = await _context.Tecnicos.AnyAsync(t => t.Email == request.Email);
-                    if (emailExists)
-                    {
-                        return BadRequest("Email já está em uso por outro técnico.");
-                    }
-                    }
-
-                    tecnico.Nome = request.Nome;
-                tecnico.Email = request.Email;
+                tecnico.Nome = request.Nome ?? tecnico.Nome;
+                tecnico.Email = request.Email ?? tecnico.Email;
                 if (!string.IsNullOrEmpty(request.Senha))
                 {
                     tecnico.Senha = BCrypt.Net.BCrypt.HashPassword(request.Senha);
                 }
-                tecnico.Especialidade = request.Especialidade;
-                tecnico.Telefone = request.Telefone;
-
-                if (string.IsNullOrEmpty(tecnico.Nome) || string.IsNullOrEmpty(tecnico.Email)
-                || string.IsNullOrEmpty(tecnico.Senha))
-                {
-                    return BadRequest("Nome, Email e Senha são obrigatórios.");
-                }
-                _context.Tecnicos.Update(tecnico);
+                tecnico.Especialidade = request.Especialidade ?? tecnico.Especialidade;
+                tecnico.Telefone = request.Telefone ?? tecnico.Telefone;
                 await _context.SaveChangesAsync();
-                return Ok("Técnico atualizado com sucesso!");
+                return Ok("Técnico editado com sucesso!");
             }
             catch (Exception ex)
             {
@@ -170,6 +153,7 @@ namespace API_MVC_Suptech.Controllers
                 return StatusCode(500, "Ocorreu um erro interno no servidor.");
             }
         }
+
 
         [HttpDelete("Excluir/{id}")]
         public async Task<IActionResult> DeletarTecnico(Guid id)

@@ -119,7 +119,7 @@ namespace API_MVC_Suptech.Controllers
 
 
         [HttpPut("Editar/{id}")]
-        public async Task<IActionResult> EditarGerente(Guid id, [FromBody] EditarDto request)
+        public async Task<IActionResult> EditarGerente(Guid id, [FromBody] EditarGerenteDto request)
         {
             _logger.LogInformation("Tentativa de editar gerente com id: {Id}", id);
 

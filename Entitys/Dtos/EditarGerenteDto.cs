@@ -2,7 +2,7 @@
 
 namespace API_MVC_Suptech.Entitys.Dtos
 {
-    public class EditarDto
+    public class EditarGerenteDto
     {
         public string? Nome { get; set; }
 
